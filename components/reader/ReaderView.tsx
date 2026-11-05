@@ -5,7 +5,7 @@ import { WikiArticle, WikiSummary } from "@/types/history";
 import { Icon } from "@/components/common/Icon";
 import Link from "next/link";
 import Image from "next/image";
-import { docHref, timelineHref } from "@/lib/seo/slug";
+import { docLinkHref, timelineHref } from "@/lib/seo/slug";
 import {
   LANE_NAMES,
   eventsAroundYear,
@@ -325,7 +325,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
                 {previewState.data.extract || "Không có phần xem trước tóm tắt."}
               </p>
               <Link prefetch={false}
-                href={docHref(previewState.data.title)}
+                href={docLinkHref(previewState.data.title)}
                 className="block text-center text-xs font-sans py-1.5 px-3 bg-paper-100 hover:bg-crimson hover:text-white rounded-lg transition-colors font-medium text-paper-900"
               >
                 Đọc bài “{previewState.data.displayTitle}” →
@@ -356,7 +356,7 @@ const RelatedEvents: React.FC<{
     <ul className="space-y-2.5 max-h-[45vh] overflow-y-auto pr-1 no-scrollbar">
       {events.map(([lane, y, title, wikiTitle]) => (
         <li key={`${lane}-${y}-${title}`}>
-          <Link prefetch={false} href={docHref(wikiTitle)} className="group block">
+          <Link prefetch={false} href={docLinkHref(wikiTitle)} className="group block">
             <span className="text-[11px] font-mono text-paper-800/60">
               {formatYear(y)} · {LANE_NAMES[lane]}
             </span>

@@ -21,8 +21,11 @@ for (const title of [...EVENTS.map((e) => e[3]), ...curatedTitles, ...EXTRA_TITL
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-export const resolveDocTitle = cache(async (slug: string): Promise<string | null> => {
+export const resolveDocTitle = cache(async (slug: string, hint?: string): Promise<string | null> => {
   if (slug.length > 120 || !SLUG_PATTERN.test(slug)) return null;
+
+  // Tiêu đề gốc đi kèm link nội bộ; chỉ tin khi khớp đúng slug nên không phụ thuộc Redis
+  if (hint && hint.length <= 300 && slugify(hint) === slug) return hint;
 
   const known = DOC_REGISTRY.get(slug);
   if (known) return known;

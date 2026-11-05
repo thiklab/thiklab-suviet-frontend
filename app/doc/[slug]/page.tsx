@@ -6,7 +6,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { articleLd, breadcrumbLd } from "@/lib/seo/jsonld";
 import { buildMetadata } from "@/lib/seo/meta";
 import { resolveDocTitle } from "@/lib/seo/articles";
-import { slugify } from "@/lib/seo/slug";
+import { docLinkHref, slugify } from "@/lib/seo/slug";
 import { CONTENT_LAST_MODIFIED } from "@/lib/seo/site";
 import { fitDescription, truncate } from "@/lib/seo/text";
 import { fetchWikiArticle } from "@/lib/wikipedia/client";
@@ -18,14 +18,20 @@ export function generateStaticParams() {
   return [];
 }
 
-const loadArticle = cache(async (slug: string) => {
-  const title = await resolveDocTitle(slug);
+type DocProps = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ t?: string | string[] }>;
+};
+
+const loadArticle = cache(async (slug: string, hint?: string) => {
+  const title = await resolveDocTitle(slug, hint);
   return title ? fetchWikiArticle(title) : null;
 });
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: DocProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = await loadArticle(slug);
+  const { t } = await searchParams;
+  const article = await loadArticle(slug, typeof t === "string" ? t : undefined);
   if (!article) return { title: "Không tìm thấy bài viết", robots: { index: false } };
 
   const canonicalSlug = slugify(article.title);
@@ -43,13 +49,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   });
 }
 
-export default async function DocPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function DocPage({ params, searchParams }: DocProps) {
   const { slug } = await params;
-  const article = await loadArticle(slug);
+  const { t } = await searchParams;
+  const article = await loadArticle(slug, typeof t === "string" ? t : undefined);
   if (!article) notFound();
 
   const canonicalSlug = slugify(article.title);
-  if (canonicalSlug !== slug) permanentRedirect(`/doc/${canonicalSlug}`);
+  if (canonicalSlug !== slug) permanentRedirect(docLinkHref(article.title));
 
   const path = `/doc/${canonicalSlug}`;
   const modified = article.summary?.timestamp ?? CONTENT_LAST_MODIFIED;

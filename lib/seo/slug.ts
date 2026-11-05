@@ -14,6 +14,9 @@ export function slugify(input: string): string {
 
 export const docHref = (title: string) => `/doc/${slugify(title) || "tu-lieu"}`;
 
+// Link nội bộ kèm tiêu đề gốc để /doc/<slug> tra ngược chính xác (slug bỏ dấu, không đảo ngược được)
+export const docLinkHref = (title: string) => `${docHref(title)}?t=${encodeURIComponent(title)}`;
+
 export const yearToSlug = (year: number) => (year < 0 ? `${-year}-tcn` : String(year));
 
 export const timelineHref = (year: number) => `/timeline/${yearToSlug(year)}`;

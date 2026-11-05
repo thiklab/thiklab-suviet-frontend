@@ -1,5 +1,5 @@
 import { TOCItem } from "@/types/history";
-import { docHref } from "@/lib/seo/slug";
+import { docLinkHref } from "@/lib/seo/slug";
 
 export function cleanAndParseWikiHtml(rawHtml: string): { cleanHtml: string; toc: TOCItem[] } {
   let html = rawHtml;
@@ -83,7 +83,7 @@ function rewriteAnchor(attrs: string, text: string): string {
     } catch {
       return text;
     }
-    return `<a href="${docHref(title)}" class="wiki-preview-link" data-wiki-title="${escapeAttr(title)}">${text}</a>`;
+    return `<a href="${docLinkHref(title)}" class="wiki-preview-link" data-wiki-title="${escapeAttr(title)}">${text}</a>`;
   }
 
   let external = href;
