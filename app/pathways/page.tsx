@@ -5,12 +5,12 @@ import { Compass, Clock, ChevronRight, Bookmark } from "lucide-react";
 
 export default function PathwaysPage() {
   return (
-    <div className="min-h-screen py-16 px-6 max-w-6xl mx-auto">
-      <div className="text-center max-w-3xl mx-auto mb-16">
+    <div className="min-h-screen py-10 sm:py-16 px-4 sm:px-6 max-w-6xl mx-auto">
+      <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
         <span className="text-xs font-mono uppercase tracking-widest text-crimson block mb-2">
           Hệ thống hóa Tiến trình Dân tộc
         </span>
-        <h1 className="text-4xl lg:text-5xl font-serif text-paper-900 tracking-tight mb-4">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-paper-900 tracking-tight mb-4">
           Năm Kỷ Nguyên Lịch Sử Việt Nam
         </h1>
         <p className="text-base font-serif text-paper-800/80 leading-relaxed">

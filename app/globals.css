@@ -13,25 +13,61 @@
 
 /* Định dạng kiểu dáng văn bản sách cổ điển cho phần nội dung bài đọc */
 .prose-editorial {
-  font-size: 1.125rem;
-  line-height: 1.85;
+  font-size: 1rem;
+  line-height: 1.8;
   color: #2D2522;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 640px) {
+  .prose-editorial {
+    font-size: 1.125rem;
+    line-height: 1.85;
+  }
+}
+
+.prose-editorial img,
+.prose-editorial video {
+  max-width: 100%;
+  height: auto;
+}
+
+.prose-editorial table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.prose-editorial figure {
+  max-width: 100%;
+  margin: 1.5rem auto;
 }
 
 .prose-editorial p {
   margin-bottom: 1.5rem;
-  text-align: justify;
+}
+
+@media (min-width: 640px) {
+  .prose-editorial p {
+    text-align: justify;
+  }
 }
 
 .prose-editorial h2 {
   font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.75rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #1E1917;
   margin-top: 2.75rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #E6DCB8;
+}
+
+@media (min-width: 640px) {
+  .prose-editorial h2 {
+    font-size: 1.75rem;
+  }
 }
 
 .prose-editorial h3 {

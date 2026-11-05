@@ -16,26 +16,28 @@ export default function HomePage() {
   return (
     <main className="min-h-screen">
       {/* 1. HERO SECTION */}
-      <section className="relative py-20 lg:py-28 px-6 text-center border-b border-paper-300/40 bg-gradient-to-b from-paper-100/50 via-paper-50 to-paper-50">
+      <section className="relative py-14 sm:py-20 lg:py-28 px-4 sm:px-6 text-center border-b border-paper-300/40 bg-gradient-to-b from-paper-100/50 via-paper-50 to-paper-50">
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-crimson/10 border border-crimson/20 text-crimson text-xs font-sans tracking-wide">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Khai phá Dữ liệu Mở Wikipedia theo Chuẩn Mới</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif text-paper-900 tracking-tight leading-[1.15]">
+          <h1 className="text-3xl min-[400px]:text-4xl sm:text-6xl lg:text-7xl font-serif text-paper-900 tracking-tight leading-[1.15]">
             Khám phá chiều sâu <br />
             <span className="italic text-crimson font-normal">Sử Việt ngàn năm</span>
           </h1>
 
           <p className="text-base sm:text-xl font-serif text-paper-800/80 max-w-2xl mx-auto leading-relaxed">
-            "Dân ta phải biết sử ta, cho tường gốc tích nước nhà Việt Nam." Trải nghiệm đối chiếu tam trục lịch sử và không gian đọc tĩnh lặng, tinh gọn.
+            "Dân ta phải biết sử ta, cho tường gốc tích nước nhà Việt Nam."
+            <br />
+            Trải nghiệm đối chiếu tam trục lịch sử và không gian đọc tĩnh lặng, tinh gọn.
           </p>
 
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+          <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
             <Link
               href="/timeline"
-              className="px-6 py-3.5 rounded-full bg-paper-900 text-paper-50 font-serif text-sm hover:bg-crimson transition-all shadow-md flex items-center gap-2 group"
+              className="px-6 py-3.5 rounded-full bg-paper-900 text-paper-50 font-serif text-sm hover:bg-crimson transition-all shadow-md flex items-center justify-center gap-2 group"
             >
               <Clock className="w-4 h-4" />
               <span>Khám phá Tam Trục Niên Biểu</span>
@@ -43,7 +45,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/pathways"
-              className="px-6 py-3.5 rounded-full bg-paper-100 border border-paper-300 text-paper-900 font-serif text-sm hover:bg-paper-200 transition-all flex items-center gap-2"
+              className="px-6 py-3.5 rounded-full bg-paper-100 border border-paper-300 text-paper-900 font-serif text-sm hover:bg-paper-200 transition-all flex items-center justify-center gap-2"
             >
               <Compass className="w-4 h-4 text-paper-800/70" />
               <span>Lộ trình 5 Thời kỳ</span>
@@ -53,7 +55,7 @@ export default function HomePage() {
       </section>
 
       {/* 2. MỐC NĂM ĐỐI CHIẾU NỔI BẬT */}
-      <section className="py-16 px-6 max-w-7xl mx-auto">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
             <span className="text-xs font-mono uppercase tracking-widest text-crimson block mb-2">
@@ -106,7 +108,7 @@ export default function HomePage() {
       </section>
 
       {/* 3. NĂM THỜI KỲ TRỌNG TÂM */}
-      <section className="py-16 px-6 bg-paper-100/40 border-t border-paper-300/40">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-paper-100/40 border-t border-paper-300/40">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-mono uppercase tracking-widest text-crimson block mb-2">
@@ -117,7 +119,7 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {HISTORICAL_ERAS.map((era) => (
               <div
                 key={era.id}

@@ -74,7 +74,7 @@ function TimelineContent() {
   const allEntries = availableYears.map((yr) => entriesMap[yr]);
 
   return (
-    <div className="min-h-screen py-10 bg-paper-50">
+    <div className="min-h-screen py-6 sm:py-10 bg-paper-50">
       {/* Ô tìm kiếm / tra cứu năm bất kỳ */}
       <div className="max-w-xl mx-auto px-4 mb-4">
         <form onSubmit={handleCustomYearSubmit} className="relative flex items-center">
@@ -84,8 +84,8 @@ function TimelineContent() {
             max="2026"
             value={customYearInput}
             onChange={(e) => setCustomYearInput(e.target.value)}
-            placeholder="Tra cứu mốc năm bất kỳ (ví dụ: 1911, 1954, 1802)..."
-            className="w-full px-5 py-3 pr-24 rounded-full bg-white border border-paper-300 text-sm font-serif placeholder:text-paper-800/40 focus:outline-none focus:border-crimson focus:ring-1 focus:ring-crimson shadow-sm"
+            placeholder="Nhập năm (ví dụ: 1911, 1954)..."
+            className="w-full px-5 py-3 pr-28 rounded-full bg-white border border-paper-300 text-sm font-serif placeholder:text-paper-800/40 focus:outline-none focus:border-crimson focus:ring-1 focus:ring-crimson shadow-sm"
           />
           <button
             type="submit"

@@ -43,25 +43,26 @@ export const ParallelTimeline: React.FC<ParallelTimelineProps> = ({
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8">
+    <div className="w-full max-w-7xl mx-auto px-4 py-6 sm:py-8">
       {/* 1. THANH ĐIỀU HƯỚNG MỐC NĂM (YEAR SELECTOR) */}
       <div className="mb-10 text-center">
         <span className="text-xs font-mono uppercase tracking-widest text-paper-800/70 block mb-2">
           Niên biểu đồng thời — Tam trục đối chiếu
         </span>
-        <h2 className="text-3xl lg:text-4xl font-serif text-paper-900 font-normal tracking-tight mb-6">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif text-paper-900 font-normal tracking-tight mb-6">
           Năm {selectedYear} {currentEntry?.label && `— ${currentEntry.label}`}
         </h2>
 
         {/* Nút chọn mốc năm dạng thẻ sách */}
-        <div className="flex items-center justify-center gap-2 overflow-x-auto pb-4 no-scrollbar">
+        <div className="flex overflow-x-auto pb-4 no-scrollbar">
+          <div className="flex items-center gap-2 mx-auto px-1">
           {entries.map((entry) => {
             const isSelected = entry.year === selectedYear;
             return (
               <button
                 key={entry.year}
                 onClick={() => onSelectYear(entry.year)}
-                className={`px-4 py-2 rounded-full text-sm font-serif transition-all duration-300 relative border ${
+                className={`shrink-0 px-4 py-2 rounded-full text-sm font-serif transition-all duration-300 relative border ${
                   isSelected
                     ? "bg-paper-900 text-paper-50 border-paper-900 shadow-md scale-105"
                     : "bg-paper-100 text-paper-800 border-paper-300/60 hover:bg-paper-200/50"
@@ -77,6 +78,7 @@ export const ParallelTimeline: React.FC<ParallelTimelineProps> = ({
               </button>
             );
           })}
+          </div>
         </div>
       </div>
 
@@ -223,7 +225,7 @@ interface EventCardProps {
 
 const EventCard: React.FC<EventCardProps> = ({ event, badgeColor }) => {
   return (
-    <article className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-paper-300/40 shadow-editorial transition-all hover:border-paper-300 hover:shadow-lg">
+    <article className="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl border border-paper-300/40 shadow-editorial transition-all hover:border-paper-300 hover:shadow-lg">
       <div className="flex items-center justify-between mb-3">
         <span className={`text-[11px] font-sans px-2.5 py-0.5 rounded-full border ${badgeColor}`}>
           {event.tag || "Sự kiện"}
@@ -231,11 +233,11 @@ const EventCard: React.FC<EventCardProps> = ({ event, badgeColor }) => {
         <span className="text-xs font-mono text-paper-800/50">Năm {event.year}</span>
       </div>
 
-      <h4 className="font-serif font-semibold text-lg text-paper-900 leading-snug mb-3">
+      <h4 className="font-serif font-semibold text-base sm:text-lg text-paper-900 leading-snug mb-3 break-words">
         {event.title}
       </h4>
 
-      <p className="text-sm font-serif text-paper-800/80 leading-relaxed mb-4">
+      <p className="text-sm font-serif text-paper-800/80 leading-relaxed mb-4 break-words">
         {event.description}
       </p>
 

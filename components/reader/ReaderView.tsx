@@ -90,7 +90,8 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
     currentTitleRef.current = title;
 
     const rect = target.getBoundingClientRect();
-    const x = Math.max(16, Math.min(rect.left + window.scrollX, window.innerWidth - 340));
+    const popoverWidth = Math.min(320, window.innerWidth - 32);
+    const x = Math.max(16, Math.min(rect.left + window.scrollX, window.innerWidth - popoverWidth - 16));
     const y = rect.bottom + window.scrollY;
 
     if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
@@ -142,8 +143,8 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
   return (
     <div className="min-h-screen bg-paper-50 selection:bg-crimson/15 selection:text-crimson-deep relative pb-20">
       {/* HEADER BÀI VIẾT */}
-      <header className="border-b border-paper-300/40 py-12 lg:py-16 bg-gradient-to-b from-paper-100/60 to-transparent">
-        <div className="max-w-5xl mx-auto px-6">
+      <header className="border-b border-paper-300/40 py-8 sm:py-12 lg:py-16 bg-gradient-to-b from-paper-100/60 to-transparent">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <Link
             href="/timeline"
             className="inline-flex items-center gap-1.5 text-xs font-sans text-paper-800/70 hover:text-crimson mb-6 transition-colors"
@@ -154,7 +155,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
           <span className="text-xs font-mono uppercase tracking-widest text-crimson font-medium mb-3 block">
             Tư liệu Lịch sử — Wikipedia Archive
           </span>
-          <h1 className="text-3xl lg:text-5xl font-serif text-paper-900 tracking-tight leading-tight mb-4">
+          <h1 className="text-2xl sm:text-3xl lg:text-5xl font-serif text-paper-900 tracking-tight leading-tight mb-4 break-words">
             {article.displayTitle}
           </h1>
           {article.summary?.description && (
@@ -166,18 +167,18 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
       </header>
 
       {/* THÂN BÀI VIẾT: GRID 12 CỘT */}
-      <div className="max-w-6xl mx-auto px-6 py-10">
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
         <div className="grid grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* NỘI DUNG CHÍNH (8 CỘT) */}
           <main
             ref={contentRef}
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
-            className="col-span-12 lg:col-span-8 bg-white/90 p-6 sm:p-10 lg:p-14 rounded-3xl border border-paper-300/40 shadow-editorial text-paper-900"
+            className="col-span-12 lg:col-span-8 min-w-0 bg-white/90 p-4 sm:p-10 lg:p-14 rounded-3xl border border-paper-300/40 shadow-editorial text-paper-900"
           >
             {/* Tóm tắt nhanh mở đầu */}
             {article.summary && (
-              <div className="mb-10 p-6 bg-paper-50 rounded-2xl border-l-4 border-crimson">
+              <div className="mb-8 sm:mb-10 p-4 sm:p-6 bg-paper-50 rounded-2xl border-l-4 border-crimson">
                 <p className="font-serif text-base text-paper-800 leading-relaxed italic">
                   {article.summary.extract}
                 </p>
@@ -190,7 +191,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
               dangerouslySetInnerHTML={{ __html: article.cleanHtml }}
             />
 
-            <div className="mt-16 pt-6 border-t border-paper-300/40 flex justify-between items-center text-xs text-paper-800/60 font-sans">
+            <div className="mt-16 pt-6 border-t border-paper-300/40 flex flex-wrap gap-2 justify-between items-center text-xs text-paper-800/60 font-sans">
               <span>Nguồn: Wikipedia tiếng Việt</span>
               <a
                 href={article.originalUrl}
@@ -246,7 +247,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
           onMouseEnter={cancelClose}
           onMouseLeave={scheduleClose}
           style={{ top: previewState.y, left: previewState.x }}
-          className="wiki-hover-popover absolute z-50 w-80 bg-white rounded-2xl shadow-popover border border-paper-300 p-4 mt-2"
+          className="wiki-hover-popover absolute z-50 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-popover border border-paper-300 p-4 mt-2"
         >
           {previewState.isLoading ? (
             <div className="flex items-center justify-center py-6 gap-2 text-paper-800/50 text-xs font-sans">
