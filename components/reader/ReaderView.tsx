@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { WikiArticle, WikiSummary } from "@/types/history";
-import { ExternalLink, List, BookOpen, ChevronLeft, Clock } from "lucide-react";
+import { Icon } from "@/components/common/Icon";
 import Link from "next/link";
 import Image from "next/image";
 import { docHref, timelineHref } from "@/lib/seo/slug";
@@ -161,7 +161,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
             href="/timeline"
             className="inline-flex items-center gap-1.5 text-xs font-sans text-paper-800/70 hover:text-crimson mb-6 transition-colors"
           >
-            <ChevronLeft className="w-3.5 h-3.5" />
+            <Icon name="chevron-left" className="w-3.5 h-3.5" />
             <span>Quay lại dòng thời gian</span>
           </Link>
           <span className="text-xs font-mono uppercase tracking-widest text-crimson font-medium mb-3 block">
@@ -241,7 +241,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
                 className="flex items-center gap-1 hover:text-crimson transition-colors"
               >
                 <span>Xem bản gốc</span>
-                <ExternalLink className="w-3 h-3" />
+                <Icon name="external-link" className="w-3 h-3" />
               </a>
             </div>
           </article>
@@ -256,7 +256,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
           <aside className="hidden lg:block col-span-4 sticky top-24 space-y-6">
             <div className="bg-paper-100/70 p-6 rounded-2xl border border-paper-300/50 backdrop-blur-sm">
               <div className="flex items-center gap-2 mb-4 text-paper-900 font-serif font-bold text-sm">
-                <List className="w-4 h-4 text-crimson" />
+                <Icon name="list" className="w-4 h-4 text-crimson" />
                 <span>Mục lục văn bản</span>
               </div>
 
@@ -349,7 +349,7 @@ const RelatedEvents: React.FC<{
 }> = ({ year, events }) => (
   <div className="bg-paper-100/70 p-6 rounded-2xl border border-paper-300/50 backdrop-blur-sm">
     <div className="flex items-center gap-2 mb-1 text-paper-900 font-serif font-bold text-sm">
-      <Clock className="w-4 h-4 text-crimson" />
+      <Icon name="clock" className="w-4 h-4 text-crimson" />
       <span>Cùng thời điểm</span>
     </div>
     <p className="text-[11px] font-sans text-paper-800/60 mb-3">Các sự kiện quanh năm {formatYear(year)}</p>

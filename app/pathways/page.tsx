@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { HISTORICAL_ERAS } from "@/lib/constants/eras";
-import { ChevronRight, Bookmark } from "lucide-react";
+import { Icon } from "@/components/common/Icon";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbLd } from "@/lib/seo/jsonld";
@@ -62,7 +62,7 @@ export default function PathwaysPage() {
 
               <div className="p-4 rounded-xl bg-paper-100/60 border border-paper-200 mb-6">
                 <div className="flex items-center gap-2 text-xs font-serif font-bold text-paper-900 mb-1">
-                  <Bookmark className="w-3.5 h-3.5 text-crimson" />
+                  <Icon name="bookmark" className="w-3.5 h-3.5 text-crimson" />
                   <span>Ý nghĩa lịch sử cốt lõi:</span>
                 </div>
                 <p className="text-xs font-serif text-paper-800/80 leading-relaxed">
@@ -81,7 +81,7 @@ export default function PathwaysPage() {
                     className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-paper-50 border border-paper-300 text-xs font-mono text-paper-900 hover:border-crimson hover:text-crimson transition-colors"
                   >
                     <span>{yr > 0 ? yr : `${Math.abs(yr)} TCN`}</span>
-                    <ChevronRight className="w-3 h-3" />
+                    <Icon name="chevron-right" className="w-3 h-3" />
                   </Link>
                 ))}
               </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Compass, BookOpen, Clock, ChevronRight, Sparkles, Scroll } from "lucide-react";
+import { Icon } from "@/components/common/Icon";
 import type { Metadata } from "next";
 import { HISTORICAL_ERAS } from "@/lib/constants/eras";
 import { buildMetadata } from "@/lib/seo/meta";
@@ -32,7 +32,7 @@ export default function HomePage() {
       <section className="relative py-14 sm:py-20 lg:py-28 px-4 sm:px-6 text-center border-b border-paper-300/40 bg-gradient-to-b from-paper-100/50 via-paper-50 to-paper-50">
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-crimson/10 border border-crimson/20 text-crimson text-xs font-sans tracking-wide">
-            <Sparkles className="w-3.5 h-3.5" />
+            <Icon name="sparkles" className="w-3.5 h-3.5" />
             <span>Khai phá Dữ liệu Mở Wikipedia theo Chuẩn Mới</span>
           </div>
 
@@ -52,15 +52,15 @@ export default function HomePage() {
               href="/timeline"
               className="px-6 py-3.5 rounded-full bg-paper-900 text-paper-50 font-serif text-sm hover:bg-crimson transition-all shadow-md flex items-center justify-center gap-2 group"
             >
-              <Clock className="w-4 h-4" />
+              <Icon name="clock" className="w-4 h-4" />
               <span>Xem dòng thời gian</span>
-              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              <Icon name="chevron-right" className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link prefetch={false}
               href="/pathways"
               className="px-6 py-3.5 rounded-full bg-paper-100 border border-paper-300 text-paper-900 font-serif text-sm hover:bg-paper-200 transition-all flex items-center justify-center gap-2"
             >
-              <Compass className="w-4 h-4 text-paper-800/70" />
+              <Icon name="compass" className="w-4 h-4 text-paper-800/70" />
               <span>5 giai đoạn lịch sử</span>
             </Link>
           </div>
@@ -98,7 +98,7 @@ export default function HomePage() {
             className="text-xs font-sans font-medium text-crimson hover:underline flex items-center gap-1"
           >
             <span>Mở toàn bộ dòng thời gian</span>
-            <ChevronRight className="w-3.5 h-3.5" />
+            <Icon name="chevron-right" className="w-3.5 h-3.5" />
           </Link>
         </div>
 
@@ -129,7 +129,7 @@ export default function HomePage() {
 
               <div className="mt-6 pt-4 border-t border-paper-100 flex items-center justify-between text-xs font-sans text-paper-800/60 group-hover:text-crimson transition-colors">
                 <span>So sánh với Trung Quốc & Thế giới</span>
-                <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                <Icon name="chevron-right" className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
               </div>
             </Link>
           ))}
@@ -175,7 +175,7 @@ export default function HomePage() {
                     className="text-[11px] font-sans font-medium text-crimson hover:underline flex items-center justify-between"
                   >
                     <span>Xem giai đoạn {era.name}</span>
-                    <ChevronRight className="w-3 h-3" />
+                    <Icon name="chevron-right" className="w-3 h-3" />
                   </Link>
                 </div>
               </div>

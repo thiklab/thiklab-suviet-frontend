@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, BookOpen, Clock, Sparkles, Menu, X } from "lucide-react";
+import { Icon, type IconName } from "@/components/common/Icon";
 
 const isActiveLink = (pathname: string, href: string) =>
   href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`) || (href === "/doc/dai-viet" && pathname.startsWith("/doc"));
@@ -16,11 +16,11 @@ export const Header: React.FC = () => {
     setMenuOpen(false);
   }, [pathname]);
 
-  const navLinks = [
-    { href: "/", label: "Tổng quan", icon: Sparkles },
-    { href: "/timeline", label: "Dòng thời gian", icon: Clock },
-    { href: "/pathways", label: "Các Giai Đoạn", icon: Compass },
-    { href: "/doc/dai-viet", label: "Đọc Bài Viết", icon: BookOpen },
+  const navLinks: { href: string; label: string; icon: IconName }[] = [
+    { href: "/", label: "Tổng quan", icon: "sparkles" },
+    { href: "/timeline", label: "Dòng thời gian", icon: "clock" },
+    { href: "/pathways", label: "Các Giai Đoạn", icon: "compass" },
+    { href: "/doc/dai-viet", label: "Đọc Bài Viết", icon: "book-open" },
   ];
 
   return (
@@ -28,9 +28,7 @@ export const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Logo mang phong cách ấn triện cổ điển */}
         <Link prefetch={false} href="/" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 rounded-xl bg-crimson flex items-center justify-center text-paper-50 font-serif font-bold text-lg shadow-sm transition-transform group-hover:scale-105">
-            Sử
-          </div>
+          <Icon name="logo" className="w-9 h-9 rounded-xl shadow-sm font-serif transition-transform group-hover:scale-105" />
           <div className="flex flex-col">
             <span className="font-serif font-bold text-base sm:text-lg text-paper-900 tracking-tight leading-none group-hover:text-crimson transition-colors">
               Sử Việt Niên Biểu
@@ -45,7 +43,6 @@ export const Header: React.FC = () => {
         <nav aria-label="Điều hướng chính" className="hidden md:flex items-center gap-1 lg:gap-2">
           {navLinks.map((item) => {
             const isActive = isActiveLink(pathname, item.href);
-            const Icon = item.icon;
             return (
               <Link prefetch={false}
                 key={item.href}
@@ -56,7 +53,7 @@ export const Header: React.FC = () => {
                     : "text-paper-800/70 hover:text-paper-900 hover:bg-paper-200/50"
                 }`}
               >
-                <Icon className="w-3.5 h-3.5 opacity-80" />
+                <Icon name={item.icon} className="w-3.5 h-3.5 opacity-80" />
                 <span>{item.label}</span>
               </Link>
             );
@@ -70,7 +67,7 @@ export const Header: React.FC = () => {
           onClick={() => setMenuOpen((o) => !o)}
           className="md:hidden p-2 -mr-2 rounded-full text-paper-900 hover:bg-paper-200/50 transition-colors"
         >
-          {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {menuOpen ? <Icon name="x" className="w-5 h-5" /> : <Icon name="menu" className="w-5 h-5" />}
         </button>
       </div>
 
@@ -78,7 +75,6 @@ export const Header: React.FC = () => {
         <nav className="md:hidden border-t border-paper-300/40 bg-paper-50/95 px-4 py-3 space-y-1">
           {navLinks.map((item) => {
             const isActive = isActiveLink(pathname, item.href);
-            const Icon = item.icon;
             return (
               <Link prefetch={false}
                 key={item.href}
@@ -89,7 +85,7 @@ export const Header: React.FC = () => {
                     : "text-paper-800 hover:bg-paper-200/50"
                 }`}
               >
-                <Icon className="w-4 h-4 opacity-80" />
+                <Icon name={item.icon} className="w-4 h-4 opacity-80" />
                 <span>{item.label}</span>
               </Link>
             );
