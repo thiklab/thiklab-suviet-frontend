@@ -25,7 +25,7 @@ export async function YearView({ year, canonicalYear = year }: { year: number; c
           }),
           breadcrumbLd([
             { name: "Trang chủ", path: "/" },
-            { name: "Niên biểu", path: "/timeline" },
+            { name: "Dòng thời gian", path: "/timeline" },
             { name: `Năm ${formatYear(year)}`, path },
           ]),
         ]}

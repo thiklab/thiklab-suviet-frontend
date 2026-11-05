@@ -6,14 +6,14 @@ import { regimeSummary, yearHeadline } from "@/lib/seo/yearMeta";
 export const runtime = "nodejs";
 export const size = OG_SIZE;
 export const contentType = "image/png";
-export const alt = "Niên biểu đối chiếu theo năm";
+export const alt = "Dòng thời gian theo năm";
 
 export default function Image({ params }: { params: { year: string } }) {
   const year = slugToYear(params.year);
-  if (year === null) return renderOg({ title: "Niên biểu lịch sử" });
+  if (year === null) return renderOg({ title: "Dòng thời gian lịch sử" });
   const r = regimeSummary(year);
   return renderOg({
-    eyebrow: `Niên biểu · Năm ${formatYear(year)}`,
+    eyebrow: `Dòng thời gian · Năm ${formatYear(year)}`,
     title: yearHeadline(year) ?? `Lịch sử năm ${formatYear(year)}`,
     subtitle: `Việt Nam: ${r.vn} · Trung Quốc: ${r.cn} · Thế giới: ${r.wd}`,
   });

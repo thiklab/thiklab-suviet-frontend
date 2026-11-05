@@ -162,7 +162,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
             className="inline-flex items-center gap-1.5 text-xs font-sans text-paper-800/70 hover:text-crimson mb-6 transition-colors"
           >
             <ChevronLeft className="w-3.5 h-3.5" />
-            <span>Quay lại Tam Trục Niên Biểu</span>
+            <span>Quay lại dòng thời gian</span>
           </Link>
           <span className="text-xs font-mono uppercase tracking-widest text-crimson font-medium mb-3 block">
             Tư liệu Lịch sử — Wikipedia Archive
@@ -303,7 +303,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
           {previewState.isLoading ? (
             <div className="flex items-center justify-center py-6 gap-2 text-paper-800/50 text-xs font-sans">
               <div className="w-3.5 h-3.5 border-2 border-crimson border-t-transparent rounded-full animate-spin" />
-              <span>Đang tra cứu tư liệu...</span>
+              <span>Đang tìm bài viết...</span>
             </div>
           ) : previewState.data ? (
             <div>
@@ -350,7 +350,7 @@ const RelatedEvents: React.FC<{
   <div className="bg-paper-100/70 p-6 rounded-2xl border border-paper-300/50 backdrop-blur-sm">
     <div className="flex items-center gap-2 mb-1 text-paper-900 font-serif font-bold text-sm">
       <Clock className="w-4 h-4 text-crimson" />
-      <span>Cùng thời kỳ</span>
+      <span>Cùng thời điểm</span>
     </div>
     <p className="text-[11px] font-sans text-paper-800/60 mb-3">Các sự kiện quanh năm {formatYear(year)}</p>
     <ul className="space-y-2.5 max-h-[45vh] overflow-y-auto pr-1 no-scrollbar">
@@ -371,7 +371,7 @@ const RelatedEvents: React.FC<{
       href={timelineHref(year)}
       className="mt-3 inline-block text-[11px] font-sans font-medium text-crimson hover:underline"
     >
-      Xem năm {formatYear(year)} trên niên biểu →
+      Xem năm {formatYear(year)} trên dòng thời gian →
     </Link>
   </div>
 );

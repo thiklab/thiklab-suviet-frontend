@@ -18,9 +18,9 @@ export const Header: React.FC = () => {
 
   const navLinks = [
     { href: "/", label: "Tổng quan", icon: Sparkles },
-    { href: "/timeline", label: "Tam Trục Niên Biểu", icon: Clock },
-    { href: "/pathways", label: "Lộ Trình Thời Kỳ", icon: Compass },
-    { href: "/doc/dai-viet", label: "Đọc Tư Liệu", icon: BookOpen },
+    { href: "/timeline", label: "Dòng thời gian", icon: Clock },
+    { href: "/pathways", label: "Các Giai Đoạn", icon: Compass },
+    { href: "/doc/dai-viet", label: "Đọc Bài Viết", icon: BookOpen },
   ];
 
   return (

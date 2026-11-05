@@ -31,7 +31,7 @@ export function yearDescription(year: number): string {
   const headline = yearHeadline(year);
   const lead = headline ? `${headline}. ` : "";
   const base = `${lead}Đối chiếu ${yearLabel(year)}: Việt Nam thời ${r.vn}, Trung Quốc thời ${r.cn}, thế giới giai đoạn ${r.wd}.`;
-  return fitDescription(base, "Kèm tư liệu mở từ Wikipedia tiếng Việt và các mốc năm liên quan.");
+  return fitDescription(base, "Kèm nội dung mở từ Wikipedia tiếng Việt và các mốc năm liên quan.");
 }
 
 export const yearPath = (year: number) => `/timeline/${yearToSlug(year)}`;

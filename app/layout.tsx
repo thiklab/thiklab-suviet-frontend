@@ -62,10 +62,10 @@ export default function RootLayout({
         <footer className="border-t border-paper-300/40 py-8 bg-paper-100/50 text-center text-xs font-sans text-paper-800/60">
           <div className="max-w-7xl mx-auto px-4 space-y-2">
             <p className="font-serif font-medium text-paper-900">
-              Sử Việt Niên Biểu — Trực quan hóa Di sản Lịch sử
+              Sử Việt Niên Biểu — Lịch sử Việt Nam dễ đọc, dễ hiểu
             </p>
             <p>
-              Dữ liệu tư liệu mở được trích xuất và chuẩn hóa từ Wikipedia tiếng Việt (giấy phép CC BY-SA 4.0).
+              Dữ liệu nội dung mở được trích xuất và chuẩn hóa từ Wikipedia tiếng Việt (giấy phép CC BY-SA 4.0).
             </p>
             <p>
               <a

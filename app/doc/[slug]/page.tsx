@@ -25,7 +25,7 @@ const loadArticle = cache(async (slug: string) => {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const article = await loadArticle(params.slug);
-  if (!article) return { title: "Không tìm thấy tư liệu", robots: { index: false } };
+  if (!article) return { title: "Không tìm thấy bài viết", robots: { index: false } };
 
   const canonicalSlug = slugify(article.title);
   return buildMetadata({

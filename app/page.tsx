@@ -8,12 +8,12 @@ import { timelineHref } from "@/lib/seo/slug";
 
 export const metadata: Metadata = {
   ...buildMetadata({
-    title: "Niên biểu lịch sử Việt Nam đối chiếu Trung Quốc và thế giới",
+    title: "Lịch sử Việt Nam so sánh với Trung Quốc và thế giới",
     description:
-      "Khám phá lịch sử Việt Nam ngàn năm qua niên biểu đối chiếu với Trung Quốc và thế giới, kèm tư liệu mở từ Wikipedia tiếng Việt cho từng mốc năm.",
+      "Khám phá lịch sử Việt Nam ngàn năm qua dòng thời gian so sánh với Trung Quốc và thế giới, kèm nội dung mở từ Wikipedia tiếng Việt cho từng mốc năm.",
     path: "/",
   }),
-  title: { absolute: "Sử Việt Niên Biểu — Niên biểu lịch sử Việt Nam đối chiếu thế giới" },
+  title: { absolute: "Sử Việt Niên Biểu — Lịch sử Việt Nam so sánh với thế giới" },
 };
 
 export default function HomePage() {
@@ -44,7 +44,7 @@ export default function HomePage() {
           <p className="text-base sm:text-xl font-serif text-paper-800/80 max-w-2xl mx-auto leading-relaxed">
             "Dân ta phải biết sử ta, cho tường gốc tích nước nhà Việt Nam."
             <br />
-            Trải nghiệm đối chiếu tam trục lịch sử và không gian đọc tĩnh lặng, tinh gọn.
+            Trải nghiệm so sánh lịch sử Việt Nam – Trung Quốc – Thế giới và không gian đọc tĩnh lặng, tinh gọn.
           </p>
 
           <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
@@ -53,7 +53,7 @@ export default function HomePage() {
               className="px-6 py-3.5 rounded-full bg-paper-900 text-paper-50 font-serif text-sm hover:bg-crimson transition-all shadow-md flex items-center justify-center gap-2 group"
             >
               <Clock className="w-4 h-4" />
-              <span>Khám phá Tam Trục Niên Biểu</span>
+              <span>Xem dòng thời gian</span>
               <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
@@ -61,7 +61,7 @@ export default function HomePage() {
               className="px-6 py-3.5 rounded-full bg-paper-100 border border-paper-300 text-paper-900 font-serif text-sm hover:bg-paper-200 transition-all flex items-center justify-center gap-2"
             >
               <Compass className="w-4 h-4 text-paper-800/70" />
-              <span>Lộ trình 5 Thời kỳ</span>
+              <span>5 giai đoạn lịch sử</span>
             </Link>
           </div>
         </div>
@@ -70,15 +70,15 @@ export default function HomePage() {
       {/* Đoạn giới thiệu cho người đọc và công cụ tìm kiếm */}
       <section className="py-10 sm:py-12 px-4 sm:px-6 max-w-3xl mx-auto" aria-labelledby="gioi-thieu">
         <h2 id="gioi-thieu" className="text-2xl font-serif text-paper-900 mb-4">
-          Niên biểu lịch sử Việt Nam là gì?
+          Sử Việt Niên Biểu dùng để làm gì?
         </h2>
         <p className="font-serif text-paper-800/90 leading-relaxed">
           Sử Việt Niên Biểu là công cụ đọc và tra cứu lịch sử Việt Nam theo từng mốc năm. Thay vì xem một sự kiện đứng riêng lẻ,
           bạn có thể đặt nó cạnh bối cảnh Trung Quốc và thế giới cùng thời điểm: chiến thắng Bạch Đằng năm 938 diễn ra khi Trung
           Hoa đang ở thời Ngũ đại Thập quốc; cuộc kháng chiến chống Nguyên Mông thế kỷ XIII gắn với sự trỗi dậy của đế quốc Mông Cổ.
-          Mỗi mốc năm có phần đối chiếu ba trục, danh sách sự kiện liên quan và liên kết sang bài viết chi tiết từ Wikipedia tiếng
-          Việt, được làm sạch để đọc thoải mái. Hãy bắt đầu từ <Link className="text-crimson underline" href={timelineHref(938)}>niên biểu năm 938</Link>{" "}
-          hoặc theo dõi <Link className="text-crimson underline" href="/pathways">năm thời kỳ lớn của lịch sử Việt Nam</Link>.
+          Mỗi mốc năm có phần so sánh Việt Nam, Trung Quốc và thế giới, danh sách sự kiện liên quan và liên kết sang bài viết chi tiết từ Wikipedia tiếng
+          Việt, được làm sạch để đọc thoải mái. Hãy bắt đầu từ <Link className="text-crimson underline" href={timelineHref(938)}>dòng thời gian năm 938</Link>{" "}
+          hoặc theo dõi <Link className="text-crimson underline" href="/pathways">5 giai đoạn lớn của lịch sử Việt Nam</Link>.
         </p>
       </section>
 
@@ -87,10 +87,10 @@ export default function HomePage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
             <span className="text-xs font-mono uppercase tracking-widest text-crimson block mb-2">
-              Niên biểu trọng điểm
+              Dòng thời gian
             </span>
             <h2 className="text-3xl font-serif text-paper-900 font-normal">
-              Các Mốc Năm Bản Lề Lịch Sử
+              Các Mốc Năm Quan Trọng
             </h2>
           </div>
           <Link
@@ -107,7 +107,7 @@ export default function HomePage() {
             <Link
               key={item.year}
               href={timelineHref(item.year)}
-              aria-label={`${item.label} (${item.year}): đối chiếu với Trung Quốc và thế giới`}
+              aria-label={`${item.label} (${item.year}): so sánh với Trung Quốc và thế giới`}
               className="group p-6 rounded-2xl bg-white/80 border border-paper-300/40 shadow-editorial hover:shadow-lg hover:border-paper-300 transition-all flex flex-col justify-between"
             >
               <div>
@@ -116,7 +116,7 @@ export default function HomePage() {
                     {item.year}
                   </span>
                   <span className="text-[11px] font-sans px-2.5 py-0.5 rounded-full bg-paper-100 text-paper-800 border border-paper-300/50">
-                    Đối chiếu 3 trục
+                    So sánh 3 bên
                   </span>
                 </div>
                 <h3 className="font-serif font-semibold text-lg text-paper-900 mb-2">
@@ -141,10 +141,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-mono uppercase tracking-widest text-crimson block mb-2">
-              Lộ trình lịch sử
+              Các giai đoạn
             </span>
             <h2 className="text-3xl font-serif text-paper-900 font-normal">
-              Trục Thời Kỳ Phát Triển Dân Tộc
+              5 Giai Đoạn Phát Triển Của Dân Tộc
             </h2>
           </div>
 
@@ -156,7 +156,7 @@ export default function HomePage() {
               >
                 <div>
                   <div className="text-xs font-serif font-bold text-crimson mb-2">
-                    Kỷ nguyên {era.romanNumeral}
+                    Giai đoạn {era.romanNumeral}
                   </div>
                   <h3 className="font-serif font-bold text-base text-paper-900 mb-1 leading-snug">
                     {era.name}
@@ -174,7 +174,7 @@ export default function HomePage() {
                     href={`/pathways#${era.id}`}
                     className="text-[11px] font-sans font-medium text-crimson hover:underline flex items-center justify-between"
                   >
-                    <span>Xem thời kỳ {era.name}</span>
+                    <span>Xem giai đoạn {era.name}</span>
                     <ChevronRight className="w-3 h-3" />
                   </Link>
                 </div>

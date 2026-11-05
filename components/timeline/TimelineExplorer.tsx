@@ -109,7 +109,7 @@ export const TimelineExplorer: React.FC<Props> = ({ initialYear, initialWiki, ch
   return (
     <div className="tl-root">
       <header className="tl-header">
-        <h1>Niên biểu đối chiếu năm {formatYear(year)}</h1>
+        <h1>Dòng thời gian năm {formatYear(year)}</h1>
         <p>Chọn một mốc năm — xem Việt Nam, Trung Quốc và Thế giới đang ở đâu cùng lúc.</p>
       </header>
 
@@ -225,7 +225,7 @@ export const TimelineExplorer: React.FC<Props> = ({ initialYear, initialWiki, ch
         {children}
 
         <div className="tl-key">
-          <h2>Mốc bản lề — bấm để đối chiếu</h2>
+          <h2>Mốc quan trọng — bấm để so sánh</h2>
           <div className="tl-keys">
             {KEY_YEARS.map((k) => (
               <Link
@@ -243,7 +243,7 @@ export const TimelineExplorer: React.FC<Props> = ({ initialYear, initialWiki, ch
       </main>
 
       <footer className="tl-footer">
-        Mốc niên đại sơ kỳ mang tính truyền thống và ước chừng. Thanh thời gian chia theo 5 thời kỳ của Việt Nam, không
+        Các mốc năm thời xa xưa mang tính truyền thống và ước chừng. Thanh thời gian chia theo 5 giai đoạn của Việt Nam, không
         theo tỷ lệ tuyến tính.
       </footer>
     </div>

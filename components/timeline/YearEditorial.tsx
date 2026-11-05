@@ -29,14 +29,14 @@ export function YearEditorial({ year, wiki }: Props) {
       <h2 id="year-context">Bối cảnh năm {formatYear(year)}</h2>
       <p>
         {headline ? `${headline}. ` : ""}
-        Vào năm {formatYear(year)}, Việt Nam đang ở thời kỳ <strong>{r.vn}</strong>, trong khi Trung Quốc thuộc giai đoạn{" "}
-        <strong>{r.cn}</strong> và thế giới đang trải qua <strong>{r.wd}</strong>. Mốc năm này nằm trong thời kỳ{" "}
+        Vào năm {formatYear(year)}, Việt Nam đang ở giai đoạn <strong>{r.vn}</strong>, trong khi Trung Quốc thuộc giai đoạn{" "}
+        <strong>{r.cn}</strong> và thế giới đang trải qua <strong>{r.wd}</strong>. Mốc năm này nằm trong giai đoạn{" "}
         <Link href={`/pathways#${era.id}`}>{era.name}</Link> của lịch sử Việt Nam ({era.timeRange}).
       </p>
 
       {curated && (
         <>
-          <h3>Biên khảo: {curated.label}</h3>
+          <h3>Tìm hiểu thêm: {curated.label}</h3>
           {[...curated.vietnam, ...curated.china, ...curated.world].map((ev) => (
             <p key={ev.id}>
               <strong>{ev.title}.</strong> {ev.description}{" "}
@@ -70,11 +70,11 @@ export function YearEditorial({ year, wiki }: Props) {
         <ul>
           {neighbors.map((y) => (
             <li key={y}>
-              <Link href={timelineHref(y)}>Đối chiếu lịch sử năm {formatYear(y)}</Link>
+              <Link href={timelineHref(y)}>So sánh lịch sử năm {formatYear(y)}</Link>
             </li>
           ))}
           <li>
-            <Link href={`/pathways#${era.id}`}>Tổng quan thời kỳ {era.name}</Link>
+            <Link href={`/pathways#${era.id}`}>Tổng quan giai đoạn {era.name}</Link>
           </li>
         </ul>
       </nav>

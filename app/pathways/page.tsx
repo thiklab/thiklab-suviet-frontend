@@ -9,9 +9,9 @@ import { buildMetadata } from "@/lib/seo/meta";
 import { timelineHref } from "@/lib/seo/slug";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Năm thời kỳ lịch sử Việt Nam: từ Hồng Bàng đến hiện đại",
+  title: "5 giai đoạn lịch sử Việt Nam: từ Hồng Bàng đến hiện đại",
   description:
-    "Lộ trình năm thời kỳ lịch sử Việt Nam từ Hồng Bàng, Bắc thuộc, quân chủ độc lập, Pháp thuộc đến hiện đại, kèm các mốc năm tiêu biểu để đối chiếu.",
+    "5 giai đoạn lịch sử Việt Nam từ Hồng Bàng, Bắc thuộc, quân chủ độc lập, Pháp thuộc đến hiện đại, kèm các mốc năm tiêu biểu để so sánh.",
   path: "/pathways",
 });
 
@@ -21,7 +21,7 @@ export default function PathwaysPage() {
       <JsonLd
         data={breadcrumbLd([
           { name: "Trang chủ", path: "/" },
-          { name: "Lộ trình thời kỳ", path: "/pathways" },
+          { name: "Các giai đoạn lịch sử", path: "/pathways" },
         ])}
       />
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
@@ -29,7 +29,7 @@ export default function PathwaysPage() {
           Hệ thống hóa Tiến trình Dân tộc
         </span>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-paper-900 tracking-tight mb-4">
-          Năm Kỷ Nguyên Lịch Sử Việt Nam
+          5 Giai Đoạn Lịch Sử Việt Nam
         </h1>
         <p className="text-base font-serif text-paper-800/80 leading-relaxed">
           Theo dõi hành trình lập quốc, đấu tranh sinh tồn, khẳng định chủ quyền và phát triển hội nhập của nước Việt qua từng giai đoạn then chốt.
@@ -45,7 +45,7 @@ export default function PathwaysPage() {
             <div className="bg-white/90 p-8 rounded-3xl border border-paper-300/40 shadow-editorial transition-all hover:border-paper-300 hover:shadow-lg">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <span className="text-xs font-mono px-3 py-1 rounded-full bg-crimson/10 text-crimson font-medium">
-                  Kỷ nguyên {era.romanNumeral}
+                  Giai đoạn {era.romanNumeral}
                 </span>
                 <span className="text-xs font-mono text-paper-800/60 font-semibold">
                   {era.timeRange}
@@ -77,7 +77,7 @@ export default function PathwaysPage() {
                   <Link
                     key={yr}
                     href={timelineHref(yr)}
-                    aria-label={`Đối chiếu lịch sử năm ${yr > 0 ? yr : `${-yr} TCN`}`}
+                    aria-label={`So sánh lịch sử năm ${yr > 0 ? yr : `${-yr} TCN`}`}
                     className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-paper-50 border border-paper-300 text-xs font-mono text-paper-900 hover:border-crimson hover:text-crimson transition-colors"
                   >
                     <span>{yr > 0 ? yr : `${Math.abs(yr)} TCN`}</span>
@@ -95,7 +95,7 @@ export default function PathwaysPage() {
         {HISTORICAL_ERAS.map((era) => (
           <div key={era.id} id={era.id} className="bg-white/90 p-6 rounded-2xl border border-paper-300/40 shadow-editorial">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-xs font-mono text-crimson font-bold">Kỷ nguyên {era.romanNumeral}</span>
+              <span className="text-xs font-mono text-crimson font-bold">Giai đoạn {era.romanNumeral}</span>
               <span className="text-[11px] font-mono text-paper-800/60">{era.timeRange}</span>
             </div>
             <h2 className="text-xl font-serif font-bold text-paper-900 mb-2">{era.name}</h2>
@@ -109,7 +109,7 @@ export default function PathwaysPage() {
                 <Link
                   key={yr}
                   href={timelineHref(yr)}
-                    aria-label={`Đối chiếu lịch sử năm ${yr > 0 ? yr : `${-yr} TCN`}`}
+                    aria-label={`So sánh lịch sử năm ${yr > 0 ? yr : `${-yr} TCN`}`}
                   className="px-2.5 py-1 rounded-full bg-paper-50 border border-paper-300 text-[11px] font-mono text-paper-900"
                 >
                   {yr > 0 ? yr : `${Math.abs(yr)} TCN`}
