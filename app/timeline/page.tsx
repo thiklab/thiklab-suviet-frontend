@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { ParallelTimeline } from "@/components/timeline/ParallelTimeline";
 import { CURATED_MILESTONES } from "@/lib/constants/milestones";
@@ -9,6 +9,20 @@ import { ParallelTimelineEntry } from "@/types/history";
 import { Search, Loader2 } from "lucide-react";
 
 export default function TimelinePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-paper-50 text-paper-800/60">
+          <Loader2 className="h-5 w-5 animate-spin text-crimson" />
+        </div>
+      }
+    >
+      <TimelineContent />
+    </Suspense>
+  );
+}
+
+function TimelineContent() {
   const searchParams = useSearchParams();
   const yearParam = searchParams.get("year");
 
@@ -103,4 +117,3 @@ export default function TimelinePage() {
     </div>
   );
 }
-
