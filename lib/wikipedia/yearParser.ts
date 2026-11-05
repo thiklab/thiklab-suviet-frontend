@@ -1,18 +1,47 @@
 import { ParallelTimelineEntry, TimelineEvent } from "@/types/history";
 import { CURATED_MILESTONES } from "@/lib/constants/milestones";
 
+const VN_DYNASTIES = [
+  "hồng bàng", "văn lang", "âu lạc", "nam việt", "hai bà trưng", "nhà tiền lý", "vạn xuân",
+  "nhà triệu việt vương", "nhà mai", "nhà phùng", "nhà khúc", "nhà dương", "nhà ngô",
+  "nhà đinh", "nhà tiền lê", "nhà lý", "nhà trần", "nhà hồ", "nhà hậu trần", "nhà lê",
+  "nhà hậu lê", "lê sơ", "lê trung hưng", "nhà mạc", "chúa trịnh", "chúa nguyễn",
+  "nhà tây sơn", "tây sơn", "nhà nguyễn", "đại cồ việt", "đại việt", "đại ngu", "đại nam",
+  "việt nam dân chủ cộng hòa", "việt nam cộng hòa", "cộng hòa xã hội chủ nghĩa việt nam",
+  "quốc gia việt nam", "đế quốc việt nam", "an nam", "giao chỉ", "giao châu",
+];
+
 const VN_KEYWORDS = [
-  "đại việt", "việt nam", "an nam", "thăng long", "quân nguyên", "nhà trần",
-  "trần hưng đạo", "nguyễn huệ", "quang trung", "quân thanh", "nhà lê",
-  "nhà lý", "ngô quyền", "bạch đằng", "hồ chí minh", "hà nội", "sài gòn", "huế",
-  "gia long", "minh mạng", "vua", "khởi nghĩa", "đinh bộ lĩnh", "hoa lư"
+  ...VN_DYNASTIES,
+  "việt nam", "thăng long", "quân nguyên", "trần hưng đạo", "nguyễn huệ", "quang trung",
+  "quân thanh", "ngô quyền", "bạch đằng", "hồ chí minh", "hà nội", "sài gòn", "huế",
+  "gia long", "minh mạng", "khởi nghĩa", "đinh bộ lĩnh", "hoa lư", "lê lợi", "lam sơn",
+  "điện biên phủ", "hải phòng", "đà nẵng",
+];
+
+const CHINA_DYNASTIES = [
+  "nhà hạ", "nhà thương", "nhà ân", "nhà chu", "tây chu", "đông chu", "xuân thu", "chiến quốc",
+  "nhà tần", "nhà hán", "tây hán", "đông hán", "nhà tân", "tam quốc", "tào ngụy", "thục hán",
+  "đông ngô", "nhà tấn", "tây tấn", "đông tấn", "thập lục quốc", "nam bắc triều",
+  "lưu tống", "nam tề", "nhà lương", "bắc ngụy", "đông ngụy", "tây ngụy", "bắc tề", "bắc chu",
+  "nhà tùy", "nhà đường", "ngũ đại thập quốc", "hậu lương", "hậu đường", "hậu tấn", "hậu hán",
+  "hậu chu", "nhà tống", "bắc tống", "nam tống", "nhà liêu", "tây hạ", "nhà kim", "nhà nguyên",
+  "nhà minh", "nam minh", "nhà thanh", "mãn thanh", "thái bình thiên quốc",
+  "trung hoa dân quốc", "cộng hòa nhân dân trung hoa",
 ];
 
 const CHINA_KEYWORDS = [
-  "trung quốc", "nhà thanh", "nhà minh", "nhà nguyên", "nhà tống", "nhà đường",
-  "bắc kinh", "nam kinh", "hoàng đế", "càn long", "hốt tất liệt", "tử cấm thành",
-  "hán", "tam quốc", "tào tháo", "lưu bị", "tùy", "mãn thanh"
+  ...CHINA_DYNASTIES,
+  "trung quốc", "trung hoa", "đại lục", "bắc kinh", "nam kinh", "thượng hải", "trùng khánh",
+  "quảng châu", "tây an", "lạc dương", "khai phong", "hàng châu", "tử cấm thành",
+  "hốt tất liệt", "thành cát tư hãn", "càn long", "khang hi", "ung chính", "tào tháo", "lưu bị",
+  "tôn quyền", "tần thủy hoàng", "võ tắc thiên", "tôn trung sơn", "tưởng giới thạch",
+  "mao trạch đông", "đặng tiểu bình", "quốc dân đảng", "đảng cộng sản trung quốc",
+  "thiên an môn", "hồng kông", "ma cao",
 ];
+
+const matchesKeyword = (text: string, kw: string) =>
+  new RegExp(`(?<![\\p{L}])${kw}(?![\\p{L}])`, "u").test(text);
 
 export async function fetchYearParallelEvents(year: number): Promise<ParallelTimelineEntry> {
   const curated = CURATED_MILESTONES[year];
@@ -54,8 +83,8 @@ export async function fetchYearParallelEvents(year: number): Promise<ParallelTim
       const lower = cleanLine.toLowerCase();
       eventIndex++;
 
-      const isVN = VN_KEYWORDS.some((kw) => lower.includes(kw));
-      const isChina = !isVN && CHINA_KEYWORDS.some((kw) => lower.includes(kw));
+      const isVN = VN_KEYWORDS.some((kw) => matchesKeyword(lower, kw));
+      const isChina = !isVN && CHINA_KEYWORDS.some((kw) => matchesKeyword(lower, kw));
 
       const event: TimelineEvent = {
         id: `${year}-ev-${eventIndex}`,
