@@ -1,0 +1,48 @@
+import { TOCItem } from "@/types/history";
+
+export function cleanAndParseWikiHtml(rawHtml: string): { cleanHtml: string; toc: TOCItem[] } {
+  let html = rawHtml;
+
+  // 1. Loại bỏ các bảng mẫu nhiễu, infobox, navbox, hộp cảnh báo
+  const unwantedPatterns = [
+    /<table[^>]*class="[^"]*(infobox|navbox|metadata|ambox|vertical-navbox)[^"]*"[^>]*>[\s\S]*?<\/table>/gi,
+    /<div[^>]*class="[^"]*(navbox|hatnote|mw-empty-elt|reflist|portal)[^"]*"[^>]*>[\s\S]*?<\/div>/gi,
+    /<div[^>]*id="[^"]*(toc|mw-navigation)[^"]*"[^>]*>[\s\S]*?<\/div>/gi,
+    /<span[^>]*class="mw-editsection"[^>]*>[\s\S]*?<\/span>/gi,
+    /<style[^>]*>[\s\S]*?<\/style>/gi,
+    /<script[^>]*>[\s\S]*?<\/script>/gi,
+    /<!--[\s\S]*?-->/gi,
+  ];
+
+  unwantedPatterns.forEach((pattern) => {
+    html = html.replace(pattern, "");
+  });
+
+  // 2. Trích xuất mục lục (TOC) từ các thẻ <h2> và <h3>
+  const toc: TOCItem[] = [];
+  let headingIndex = 0;
+
+  html = html.replace(/<h([23])([^>]*)>(.*?)<\/h\1>/gi, (match, levelStr, attrs, innerContent) => {
+    headingIndex++;
+    const level = parseInt(levelStr, 10);
+    const text = innerContent.replace(/<[^>]+>/g, "").trim();
+
+    // Bỏ qua các mục phụ không cần thiết như Chú thích, Xem thêm, Thư mục
+    if (["chú thích", "tham khảo", "xem thêm", "liên kết ngoài", "nguồn"].includes(text.toLowerCase())) {
+      return "";
+    }
+
+    const slug = `heading-${headingIndex}-${text.toLowerCase().replace(/[^\w\u00C0-\u1EF9]/g, "-")}`;
+    toc.push({ id: slug, text, level });
+    return `<h${level} id="${slug}" class="editorial-heading-${level}">${innerContent}</h${level}>`;
+  });
+
+  // 3. Chuẩn hóa link Wikipedia nội bộ để kích hoạt hover preview tooltip
+  html = html.replace(/<a\s+[^>]*href=["']\/wiki\/([^"':#]+)["'][^>]*>(.*?)<\/a>/gi, (match, wikiSlug, text) => {
+    const decodedTitle = decodeURIComponent(wikiSlug).replace(/_/g, " ");
+    return `<a href="/read/${encodeURIComponent(decodedTitle)}" class="wiki-preview-link" data-wiki-title="${decodedTitle}">${text}</a>`;
+  });
+
+  return { cleanHtml: html, toc };
+}
+

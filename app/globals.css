@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #FAF7F2;
+    color: #1E1917;
+    font-family: var(--font-serif), Georgia, serif;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* Định dạng kiểu dáng văn bản sách cổ điển cho phần nội dung bài đọc */
+.prose-editorial {
+  font-size: 1.125rem;
+  line-height: 1.85;
+  color: #2D2522;
+}
+
+.prose-editorial p {
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.prose-editorial h2 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1E1917;
+  margin-top: 2.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #E6DCB8;
+}
+
+.prose-editorial h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #8F1D1D;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Kiểu dáng liên kết nội bộ Wikipedia */
+.prose-editorial a.wiki-preview-link {
+  color: #8F1D1D;
+  text-decoration: underline;
+  text-decoration-color: rgba(143, 29, 29, 0.3);
+  text-underline-offset: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.prose-editorial a.wiki-preview-link:hover {
+  color: #6D1414;
+  text-decoration-color: #6D1414;
+  background-color: rgba(143, 29, 29, 0.06);
+  border-radius: 2px;
+}
+
+/* Ẩn thanh cuộn nhưng vẫn giữ chức năng cuộn */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
