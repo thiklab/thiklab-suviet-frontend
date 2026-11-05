@@ -59,7 +59,7 @@ export default function RootLayout({
         <Header />
         <div className="flex-1">{children}</div>
         <footer className="border-t border-paper-300/40 py-8 bg-paper-100/50 text-center text-xs font-sans text-paper-800/60">
-          <div className="max-w-7xl mx-auto px-4 space-y-2">
+          <div className="max-w-8xl mx-auto px-4 space-y-2">
             <p className="font-serif font-medium text-paper-900">
               Sử Việt Niên Biểu — Lịch sử Việt Nam dễ đọc, dễ hiểu
             </p>

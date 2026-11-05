@@ -83,7 +83,7 @@ export default function HomePage() {
       </section>
 
       {/* 2. MỐC NĂM ĐỐI CHIẾU NỔI BẬT */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-8xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
             <span className="text-xs font-mono uppercase tracking-widest text-crimson block mb-2">
@@ -138,7 +138,7 @@ export default function HomePage() {
 
       {/* 3. NĂM THỜI KỲ TRỌNG TÂM */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-paper-100/40 border-t border-paper-300/40">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-8xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-mono uppercase tracking-widest text-crimson block mb-2">
               Các giai đoạn
