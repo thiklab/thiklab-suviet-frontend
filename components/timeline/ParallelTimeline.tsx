@@ -247,7 +247,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, badgeColor }) => {
           <span>Đọc thêm</span>
           <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
         </Link>
-      )}
+      ) : null}
     </article>
   );
 };

@@ -1,5 +1,6 @@
 import { WikiArticle, WikiSummary } from "@/types/history";
 import { cleanAndParseWikiHtml } from "./cleaner";
+import { cached } from "@/lib/cache/redis";
 
 const WIKI_REST_BASE = "https://vi.wikipedia.org/api/rest_v1";
 const WIKI_ACTION_BASE = "https://vi.wikipedia.org/w/api.php";
@@ -53,6 +54,10 @@ export async function fetchWikiSummary(title: string): Promise<WikiSummary | nul
 }
 
 export async function fetchWikiArticle(title: string): Promise<WikiArticle | null> {
+  return cached(`suviet:article:v1:${title}`, 60 * 60 * 24, () => loadWikiArticle(title));
+}
+
+async function loadWikiArticle(title: string): Promise<WikiArticle | null> {
   try {
     const [summary, parseRes] = await Promise.all([
       fetchWikiSummary(title),

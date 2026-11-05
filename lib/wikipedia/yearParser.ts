@@ -57,7 +57,13 @@ export async function fetchYearParallelEvents(year: number): Promise<ParallelTim
   try {
     const res = await fetch(
       `https://vi.wikipedia.org/w/api.php?action=parse&page=${year}&prop=wikitext&format=json&origin=*`,
-      { next: { revalidate: 86400 * 7 } }
+      {
+        headers: {
+          "User-Agent": "SuVietExplorer/1.0 (https://suviet.dev; contact@suviet.dev)",
+          "Api-User-Agent": "SuVietExplorer/1.0 (https://suviet.dev; contact@suviet.dev)",
+        },
+        next: { revalidate: 86400 * 7 },
+      }
     );
 
     if (!res.ok) return defaultEntry;

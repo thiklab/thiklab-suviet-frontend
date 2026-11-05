@@ -4,7 +4,6 @@ import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { ParallelTimeline } from "@/components/timeline/ParallelTimeline";
 import { CURATED_MILESTONES } from "@/lib/constants/milestones";
-import { fetchYearParallelEvents } from "@/lib/wikipedia/yearParser";
 import { ParallelTimelineEntry } from "@/types/history";
 import { Search, Loader2 } from "lucide-react";
 
@@ -51,7 +50,9 @@ function TimelineContent() {
     if (!entriesMap[year]) {
       setIsLoading(true);
       try {
-        const entry = await fetchYearParallelEvents(year);
+        const res = await fetch(`/api/timeline?year=${year}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const entry: ParallelTimelineEntry = await res.json();
         setEntriesMap((prev) => ({ ...prev, [year]: entry }));
       } catch (err) {
         console.error("Lỗi khi tải mốc năm:", err);
