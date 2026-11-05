@@ -46,6 +46,7 @@ export async function fetchWikiSummary(title: string): Promise<WikiSummary | nul
         : undefined,
       pageUrl: data.content_urls?.desktop?.page || `https://vi.wikipedia.org/wiki/${encodeURIComponent(title)}`,
       description: data.description,
+      timestamp: data.timestamp,
     };
   } catch (error) {
     console.error(`Lỗi khi fetch summary cho "${title}":`, error);
@@ -54,7 +55,7 @@ export async function fetchWikiSummary(title: string): Promise<WikiSummary | nul
 }
 
 export async function fetchWikiArticle(title: string): Promise<WikiArticle | null> {
-  return cached(`suviet:article:v1:${title}`, 60 * 60 * 24, async () => {
+  return cached(`suviet:article:v2:${title}`, 60 * 60 * 24, async () => {
     const direct = await loadWikiArticle(title);
     if (direct) return direct;
 
@@ -64,27 +65,46 @@ export async function fetchWikiArticle(title: string): Promise<WikiArticle | nul
   });
 }
 
-async function searchWikiTitle(query: string): Promise<string | null> {
+export async function searchWikiTitles(query: string, limit = 1): Promise<string[]> {
   try {
     const res = await fetch(
-      `${WIKI_ACTION_BASE}?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=1&format=json&origin=*`,
+      `${WIKI_ACTION_BASE}?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=${limit}&format=json&origin=*`,
       { headers: WIKI_HEADERS, next: { revalidate: 86400 } }
     );
-    if (!res.ok) return null;
+    if (!res.ok) return [];
     const data = await res.json();
-    return data?.query?.search?.[0]?.title ?? null;
+    return (data?.query?.search ?? []).map((r: { title: string }) => r.title);
   } catch {
-    return null;
+    return [];
   }
+}
+
+async function searchWikiTitle(query: string): Promise<string | null> {
+  return (await searchWikiTitles(query, 1))[0] ?? null;
+}
+
+// Lỗi mạng thoáng qua sẽ bị ISR cache thành 404 nếu không thử lại
+async function fetchWithRetry(url: string, attempts = 3): Promise<Response> {
+  let lastError: unknown;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      const res = await fetch(url, { headers: WIKI_HEADERS, next: { revalidate: 86400 } });
+      if (res.ok || (res.status < 500 && res.status !== 429)) return res;
+      lastError = new Error(`HTTP ${res.status}`);
+    } catch (err) {
+      lastError = err;
+    }
+    await new Promise((r) => setTimeout(r, 400 * (i + 1)));
+  }
+  throw lastError;
 }
 
 async function loadWikiArticle(title: string): Promise<WikiArticle | null> {
   try {
     const [summary, parseRes] = await Promise.all([
       fetchWikiSummary(title),
-      fetch(
-        `${WIKI_ACTION_BASE}?action=parse&page=${encodeURIComponent(title)}&prop=text&format=json&origin=*`,
-        { headers: WIKI_HEADERS, next: { revalidate: 86400 } }
+      fetchWithRetry(
+        `${WIKI_ACTION_BASE}?action=parse&page=${encodeURIComponent(title)}&prop=text&redirects=1&format=json&origin=*`
       ),
     ]);
 
@@ -96,13 +116,16 @@ async function loadWikiArticle(title: string): Promise<WikiArticle | null> {
 
     const { cleanHtml, toc } = cleanAndParseWikiHtml(rawHtml);
 
+    // Dùng tiêu đề chuẩn sau chuyển hướng để slug và canonical luôn ổn định
+    const canonicalTitle = summary?.title || parseData?.parse?.title || title;
+
     return {
-      title,
-      displayTitle: summary?.displayTitle || title,
+      title: canonicalTitle,
+      displayTitle: summary?.displayTitle || canonicalTitle,
       cleanHtml,
       summary: summary || undefined,
       toc,
-      originalUrl: `https://vi.wikipedia.org/wiki/${encodeURIComponent(title)}`,
+      originalUrl: `https://vi.wikipedia.org/wiki/${encodeURIComponent(canonicalTitle.replace(/ /g, "_"))}`,
     };
   } catch (error) {
     console.error(`Lỗi khi fetch bài viết "${title}":`, error);

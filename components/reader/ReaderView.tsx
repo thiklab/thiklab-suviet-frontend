@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { WikiArticle, WikiSummary } from "@/types/history";
 import { ExternalLink, List, BookOpen, ChevronLeft, Clock } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { docHref, timelineHref } from "@/lib/seo/slug";
 import {
   LANE_NAMES,
   eventsAroundYear,
@@ -151,7 +153,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
   };
 
   return (
-    <div className="min-h-screen bg-paper-50 selection:bg-crimson/15 selection:text-crimson-deep relative pb-20">
+    <main className="min-h-screen bg-paper-50 selection:bg-crimson/15 selection:text-crimson-deep relative pb-20">
       {/* HEADER BÀI VIẾT */}
       <header className="border-b border-paper-300/40 py-8 sm:py-12 lg:py-16 bg-gradient-to-b from-paper-100/60 to-transparent">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
@@ -180,7 +182,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
       <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
         <div className="grid grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* NỘI DUNG CHÍNH (8 CỘT) */}
-          <main
+          <article
             ref={contentRef}
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
@@ -202,18 +204,47 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
             />
 
             <div className="mt-16 pt-6 border-t border-paper-300/40 flex flex-wrap gap-2 justify-between items-center text-xs text-paper-800/60 font-sans">
-              <span>Nguồn: Wikipedia tiếng Việt</span>
+              <p className="leading-relaxed">
+                Nguồn:{" "}
+                <a
+                  href={article.originalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:text-crimson"
+                >
+                  “{article.displayTitle}” — Wikipedia tiếng Việt
+                </a>
+                , theo giấy phép{" "}
+                <a
+                  href="https://creativecommons.org/licenses/by-sa/4.0/deed.vi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:text-crimson"
+                >
+                  CC BY-SA 4.0
+                </a>
+                .
+                {article.summary?.timestamp && (
+                  <>
+                    {" "}Cập nhật lần cuối:{" "}
+                    <time dateTime={article.summary.timestamp}>
+                      {new Date(article.summary.timestamp).toLocaleDateString("vi-VN")}
+                    </time>
+                    .
+                  </>
+                )}
+              </p>
               <a
                 href={article.originalUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="flex items-center gap-1 hover:text-crimson transition-colors"
               >
                 <span>Xem bản gốc</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>
-          </main>
+          </article>
 
           {articleYear !== null && relatedEvents.length > 0 && (
             <div className="col-span-12 lg:hidden">
@@ -278,10 +309,12 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
             <div>
               {previewState.data.thumbnail && (
                 <div className="relative w-full h-32 mb-3 rounded-lg overflow-hidden bg-paper-100">
-                  <img
+                  <Image
                     src={previewState.data.thumbnail.source}
-                    alt={previewState.data.displayTitle}
-                    className="w-full h-full object-cover"
+                    alt={`Ảnh minh họa: ${previewState.data.displayTitle}`}
+                    fill
+                    sizes="320px"
+                    className="object-cover"
                   />
                 </div>
               )}
@@ -292,10 +325,10 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
                 {previewState.data.extract || "Không có phần xem trước tóm tắt."}
               </p>
               <Link
-                href={`/read/${encodeURIComponent(previewState.data.title)}`}
+                href={docHref(previewState.data.title)}
                 className="block text-center text-xs font-sans py-1.5 px-3 bg-paper-100 hover:bg-crimson hover:text-white rounded-lg transition-colors font-medium text-paper-900"
               >
-                Đọc bài chi tiết →
+                Đọc bài “{previewState.data.displayTitle}” →
               </Link>
             </div>
           ) : (
@@ -305,7 +338,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
           )}
         </div>
       )}
-    </div>
+    </main>
   );
 };
 
@@ -323,7 +356,7 @@ const RelatedEvents: React.FC<{
     <ul className="space-y-2.5 max-h-[45vh] overflow-y-auto pr-1 no-scrollbar">
       {events.map(([lane, y, title, wikiTitle]) => (
         <li key={`${lane}-${y}-${title}`}>
-          <Link href={`/read/${encodeURIComponent(wikiTitle)}`} className="group block">
+          <Link href={docHref(wikiTitle)} className="group block">
             <span className="text-[11px] font-mono text-paper-800/60">
               {formatYear(y)} · {LANE_NAMES[lane]}
             </span>
@@ -335,10 +368,10 @@ const RelatedEvents: React.FC<{
       ))}
     </ul>
     <Link
-      href={`/timeline?year=${year}`}
+      href={timelineHref(year)}
       className="mt-3 inline-block text-[11px] font-sans font-medium text-crimson hover:underline"
     >
-      Xem trên niên biểu →
+      Xem năm {formatYear(year)} trên niên biểu →
     </Link>
   </div>
 );

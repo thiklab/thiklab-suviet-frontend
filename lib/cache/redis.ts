@@ -22,27 +22,35 @@ function getClient(): Redis | null {
 export async function cached<T>(
   key: string,
   ttlSeconds: number,
-  loader: () => Promise<T | null>
+  loader: () => Promise<T | null>,
+  options: { negativeTtl?: number } = {}
 ): Promise<T | null> {
   const client = getClient();
 
   if (client) {
     try {
       const hit = await client.get(key);
-      if (hit) return JSON.parse(hit) as T;
+      if (hit !== null) return JSON.parse(hit) as T | null;
     } catch (err) {
       console.error("Redis get lỗi:", err);
     }
   }
 
   const value = await loader();
+  const isEmpty = value === null || value === undefined;
 
-  if (client && value !== null && value !== undefined) {
+  // Kết quả rỗng chỉ được lưu (dạng "null") khi có negativeTtl
+  if (client && (!isEmpty || options.negativeTtl)) {
     try {
-      await client.set(key, JSON.stringify(value), "EX", ttlSeconds);
+      await client.set(
+        key,
+        JSON.stringify(isEmpty ? null : value),
+        "EX",
+        isEmpty ? options.negativeTtl! : ttlSeconds
+      );
     } catch (err) {
       console.error("Redis set lỗi:", err);
     }
   }
-  return value;
+  return isEmpty ? null : value;
 }

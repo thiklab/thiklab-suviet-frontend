@@ -200,3 +200,10 @@
 .tl-root .tl-in, .tl-root .tl-main, .tl-root .tl-footer, .tl-root .tl-header { font-family: var(--font-be-vietnam), system-ui, sans-serif; }
 .tl-header h1, .tl-year, .tl-reg { font-family: var(--font-be-vietnam), system-ui, sans-serif; }
 
+
+.tl-editorial { margin-top: 24px; padding: 18px 16px; background: var(--tl-card); border: 1px solid var(--tl-line); border-radius: 12px; font-family: var(--font-be-vietnam), system-ui, sans-serif; font-size: 14px; line-height: 1.7; }
+.tl-editorial h2 { font-size: 17px; margin: 0 0 8px; }
+.tl-editorial h3 { font-size: 15px; margin: 18px 0 6px; }
+.tl-editorial ul { margin: 0; padding-left: 18px; }
+.tl-editorial a { text-decoration: underline; text-underline-offset: 2px; }
+.tl-editorial .tl-attrib { margin-top: 16px; font-size: 12px; color: var(--tl-mute); }

@@ -1,19 +1,51 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/common/Header";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationLd, websiteLd } from "@/lib/seo/jsonld";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo/site";
 
 const beVietnam = Be_Vietnam_Pro({
-  subsets: ["latin", "latin-ext", "vietnamese"],
-  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
   variable: "--font-be-vietnam",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Sử Việt Niên Biểu — Khám phá Lịch sử Việt Nam",
-  description: "Trải nghiệm đọc và đối chiếu lịch sử Việt Nam với phong cách Editorial tối giản, khai thác nguồn dữ liệu mở từ Wikipedia tiếng Việt.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} — Khám phá lịch sử Việt Nam theo mốc năm`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FAF7F2",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -24,6 +56,7 @@ export default function RootLayout({
   return (
     <html lang="vi" className={beVietnam.variable}>
       <body className="min-h-screen bg-paper-50 text-paper-900 font-serif antialiased selection:bg-crimson/15 selection:text-crimson-deep flex flex-col">
+        <JsonLd data={[websiteLd(), organizationLd()]} />
         <Header />
         <div className="flex-1">{children}</div>
         <footer className="border-t border-paper-300/40 py-8 bg-paper-100/50 text-center text-xs font-sans text-paper-800/60">
@@ -32,7 +65,7 @@ export default function RootLayout({
               Sử Việt Niên Biểu — Trực quan hóa Di sản Lịch sử
             </p>
             <p>
-              Dữ liệu tư liệu mở được trích xuất và chuẩn hóa từ Wikipedia tiếng Việt.
+              Dữ liệu tư liệu mở được trích xuất và chuẩn hóa từ Wikipedia tiếng Việt (giấy phép CC BY-SA 4.0).
             </p>
           </div>
         </footer>
@@ -40,4 +73,3 @@ export default function RootLayout({
     </html>
   );
 }
-

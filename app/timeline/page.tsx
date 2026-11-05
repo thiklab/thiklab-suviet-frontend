@@ -1,25 +1,20 @@
-"use client";
+import type { Metadata } from "next";
+import { YearView } from "@/components/timeline/YearView";
+import { buildMetadata } from "@/lib/seo/meta";
+import { yearDescription, yearPath, yearTitle } from "@/lib/seo/yearMeta";
 
-import React, { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { Loader2 } from "lucide-react";
-import { TimelineExplorer } from "@/components/timeline/TimelineExplorer";
+export const revalidate = 86400;
+
+const DEFAULT_YEAR = 938;
+
+// Trang gốc /timeline hiển thị mốc 938 và canonical về /timeline/938 để không trùng nội dung
+export const metadata: Metadata = buildMetadata({
+  title: yearTitle(DEFAULT_YEAR),
+  description: yearDescription(DEFAULT_YEAR),
+  path: yearPath(DEFAULT_YEAR),
+  type: "article",
+});
 
 export default function TimelinePage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-screen items-center justify-center bg-paper-50 text-paper-800/60">
-          <Loader2 className="h-5 w-5 animate-spin text-crimson" />
-        </div>
-      }
-    >
-      <TimelineContent />
-    </Suspense>
-  );
-}
-
-function TimelineContent() {
-  const param = parseInt(useSearchParams().get("year") ?? "", 10);
-  return <TimelineExplorer initialYear={isNaN(param) ? 938 : param} />;
+  return <YearView year={DEFAULT_YEAR} />;
 }

@@ -1,7 +1,20 @@
 import React from "react";
 import Link from "next/link";
 import { Compass, BookOpen, Clock, ChevronRight, Sparkles, Scroll } from "lucide-react";
+import type { Metadata } from "next";
 import { HISTORICAL_ERAS } from "@/lib/constants/eras";
+import { buildMetadata } from "@/lib/seo/meta";
+import { timelineHref } from "@/lib/seo/slug";
+
+export const metadata: Metadata = {
+  ...buildMetadata({
+    title: "Niên biểu lịch sử Việt Nam đối chiếu Trung Quốc và thế giới",
+    description:
+      "Khám phá lịch sử Việt Nam ngàn năm qua niên biểu đối chiếu với Trung Quốc và thế giới, kèm tư liệu mở từ Wikipedia tiếng Việt cho từng mốc năm.",
+    path: "/",
+  }),
+  title: { absolute: "Sử Việt Niên Biểu — Niên biểu lịch sử Việt Nam đối chiếu thế giới" },
+};
 
 export default function HomePage() {
   const featuredYears = [
@@ -54,6 +67,21 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Đoạn giới thiệu cho người đọc và công cụ tìm kiếm */}
+      <section className="py-10 sm:py-12 px-4 sm:px-6 max-w-3xl mx-auto" aria-labelledby="gioi-thieu">
+        <h2 id="gioi-thieu" className="text-2xl font-serif text-paper-900 mb-4">
+          Niên biểu lịch sử Việt Nam là gì?
+        </h2>
+        <p className="font-serif text-paper-800/90 leading-relaxed">
+          Sử Việt Niên Biểu là công cụ đọc và tra cứu lịch sử Việt Nam theo từng mốc năm. Thay vì xem một sự kiện đứng riêng lẻ,
+          bạn có thể đặt nó cạnh bối cảnh Trung Quốc và thế giới cùng thời điểm: chiến thắng Bạch Đằng năm 938 diễn ra khi Trung
+          Hoa đang ở thời Ngũ đại Thập quốc; cuộc kháng chiến chống Nguyên Mông thế kỷ XIII gắn với sự trỗi dậy của đế quốc Mông Cổ.
+          Mỗi mốc năm có phần đối chiếu ba trục, danh sách sự kiện liên quan và liên kết sang bài viết chi tiết từ Wikipedia tiếng
+          Việt, được làm sạch để đọc thoải mái. Hãy bắt đầu từ <Link className="text-crimson underline" href={timelineHref(938)}>niên biểu năm 938</Link>{" "}
+          hoặc theo dõi <Link className="text-crimson underline" href="/pathways">năm thời kỳ lớn của lịch sử Việt Nam</Link>.
+        </p>
+      </section>
+
       {/* 2. MỐC NĂM ĐỐI CHIẾU NỔI BẬT */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
@@ -78,7 +106,8 @@ export default function HomePage() {
           {featuredYears.map((item) => (
             <Link
               key={item.year}
-              href={`/timeline?year=${item.year}`}
+              href={timelineHref(item.year)}
+              aria-label={`${item.label} (${item.year}): đối chiếu với Trung Quốc và thế giới`}
               className="group p-6 rounded-2xl bg-white/80 border border-paper-300/40 shadow-editorial hover:shadow-lg hover:border-paper-300 transition-all flex flex-col justify-between"
             >
               <div>
@@ -145,7 +174,7 @@ export default function HomePage() {
                     href={`/pathways#${era.id}`}
                     className="text-[11px] font-sans font-medium text-crimson hover:underline flex items-center justify-between"
                   >
-                    <span>Xem chi tiết</span>
+                    <span>Xem thời kỳ {era.name}</span>
                     <ChevronRight className="w-3 h-3" />
                   </Link>
                 </div>

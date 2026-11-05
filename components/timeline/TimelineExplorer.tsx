@@ -21,27 +21,33 @@ import {
   regimeAt,
   yearToPos,
 } from "@/lib/constants/timeline-data";
+import { docHref, timelineHref } from "@/lib/seo/slug";
 
 const LANES: Lane[] = ["vn", "cn", "wd"];
 const clampYear = (y: number) => Math.max(MIN_YEAR, Math.min(MAX_YEAR, Math.round(y)));
 
 interface Props {
   initialYear: number;
+  initialWiki?: ParallelTimelineEntry | null;
+  children?: React.ReactNode;
 }
 
-export const TimelineExplorer: React.FC<Props> = ({ initialYear }) => {
+export const TimelineExplorer: React.FC<Props> = ({ initialYear, initialWiki, children }) => {
   const [year, setYear] = useState<number>(clampYear(initialYear));
   const [win, setWin] = useState<number>(50);
-  const [wikiEntry, setWikiEntry] = useState<ParallelTimelineEntry | null>(null);
+  const [wikiEntry, setWikiEntry] = useState<ParallelTimelineEntry | null>(
+    initialWiki && initialWiki.year === clampYear(initialYear) ? initialWiki : null
+  );
   const [wikiLoading, setWikiLoading] = useState(false);
   const rulerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const wikiCache = useRef<Map<number, ParallelTimelineEntry | null>>(new Map());
+  if (initialWiki) wikiCache.current.set(initialWiki.year, initialWiki);
 
   const select = useCallback((y: number) => {
     const next = clampYear(y);
     setYear(next);
-    window.history.replaceState(null, "", `?year=${next}`);
+    window.history.replaceState(null, "", timelineHref(next));
   }, []);
 
   useEffect(() => {
@@ -103,7 +109,7 @@ export const TimelineExplorer: React.FC<Props> = ({ initialYear }) => {
   return (
     <div className="tl-root">
       <header className="tl-header">
-        <h1>Niên biểu đối chiếu</h1>
+        <h1>Niên biểu đối chiếu năm {formatYear(year)}</h1>
         <p>Chọn một mốc năm — xem Việt Nam, Trung Quốc và Thế giới đang ở đâu cùng lúc.</p>
       </header>
 
@@ -111,7 +117,7 @@ export const TimelineExplorer: React.FC<Props> = ({ initialYear }) => {
         <div className="tl-in">
           <div className="tl-row">
             <div className="tl-year">
-              {formatYear(year)}
+              {year > 0 ? <time dateTime={String(year).padStart(4, "0")}>{formatYear(year)}</time> : formatYear(year)}
               <small>{era[0]}</small>
             </div>
             <div className="tl-steps">
@@ -216,21 +222,21 @@ export const TimelineExplorer: React.FC<Props> = ({ initialYear }) => {
           ))}
         </div>
 
+        {children}
+
         <div className="tl-key">
           <h2>Mốc bản lề — bấm để đối chiếu</h2>
           <div className="tl-keys">
             {KEY_YEARS.map((k) => (
-              <button
+              <Link
                 key={k}
-                type="button"
+                href={timelineHref(k)}
+                scroll
                 className={`tl-chip ${k === year ? "on" : ""}`}
-                onClick={() => {
-                  select(k);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
+                aria-current={k === year ? "page" : undefined}
               >
-                {k}
-              </button>
+                {formatYear(k)}
+              </Link>
             ))}
           </div>
         </div>
@@ -286,8 +292,8 @@ const LaneCard: React.FC<LaneCardProps> = ({ lane, year, win, wikiEvents, wikiLo
                 {formatYear(e[1])} · {rel}
               </em>
             </button>
-            <Link className="tl-more" href={`/read/${encodeURIComponent(e[3])}`}>
-              Đọc thêm →
+            <Link className="tl-more" href={docHref(e[3])}>
+              Đọc thêm<span className="sr-only"> về {e[2]}</span> →
             </Link>
           </div>
         );
@@ -299,8 +305,8 @@ const LaneCard: React.FC<LaneCardProps> = ({ lane, year, win, wikiEvents, wikiLo
           {wikiEvents.map((ev) => (
             <div key={ev.id} className="tl-ev">
               <p>{ev.description}</p>
-              <Link className="tl-more" href={`/read/${encodeURIComponent(ev.wikiTitle || ev.title)}`}>
-                Đọc thêm →
+              <Link className="tl-more" href={docHref(ev.wikiTitle || ev.title)}>
+                Đọc thêm<span className="sr-only"> về {ev.title}</span> →
               </Link>
             </div>
           ))}

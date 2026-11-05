@@ -1,4 +1,5 @@
 import { TOCItem } from "@/types/history";
+import { docHref } from "@/lib/seo/slug";
 
 export function cleanAndParseWikiHtml(rawHtml: string): { cleanHtml: string; toc: TOCItem[] } {
   let html = rawHtml;
@@ -49,10 +50,15 @@ export function cleanAndParseWikiHtml(rawHtml: string): { cleanHtml: string; toc
     return `<h${level} id="${slug}" class="editorial-heading-${level}">${innerContent}</h${level}>`;
   });
 
-  // 3. Chuẩn hóa link Wikipedia nội bộ để kích hoạt hover preview tooltip
-  html = html.replace(/<a\s+[^>]*href=["']\/wiki\/([^"':#]+)["'][^>]*>(.*?)<\/a>/gi, (match, wikiSlug, text) => {
-    const decodedTitle = decodeURIComponent(wikiSlug).replace(/_/g, " ");
-    return `<a href="/read/${encodeURIComponent(decodedTitle)}" class="wiki-preview-link" data-wiki-title="${decodedTitle}">${text}</a>`;
+  // 3. Chuẩn hóa mọi liên kết: nội bộ -> /doc/<slug>, còn lại -> Wikipedia hoặc bỏ link
+  html = html.replace(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi, (_m, attrs: string, text: string) =>
+    rewriteAnchor(attrs, text)
+  );
+
+  // 4. Ảnh: tải lười, URL tuyệt đối
+  html = html.replace(/<img\b([^>]*)>/gi, (_m, attrs: string) => {
+    const fixed = attrs.replace(/\bsrc=(["'])\/\//i, "src=$1https://");
+    return `<img loading="lazy" decoding="async"${fixed}>`;
   });
 
   html = removeBalancedTags(html, "span", /mw-editsection/);
@@ -60,6 +66,32 @@ export function cleanAndParseWikiHtml(rawHtml: string): { cleanHtml: string; toc
   return { cleanHtml: html, toc };
 }
 
+const escapeAttr = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+function rewriteAnchor(attrs: string, text: string): string {
+  const href = /\bhref=["']([^"']*)["']/i.exec(attrs)?.[1];
+  if (!href) return text;
+  if (/\bclass=["'][^"']*\bnew\b/i.test(attrs) || /redlink=1/.test(href)) return text; // trang chưa tồn tại
+  if (href.startsWith("#")) return text;
+
+  const wiki = /^\/wiki\/([^"':#?]+)(#.*)?$/.exec(href);
+  if (wiki) {
+    let title: string;
+    try {
+      title = decodeURIComponent(wiki[1]).replace(/_/g, " ");
+    } catch {
+      return text;
+    }
+    return `<a href="${docHref(title)}" class="wiki-preview-link" data-wiki-title="${escapeAttr(title)}">${text}</a>`;
+  }
+
+  let external = href;
+  if (href.startsWith("//")) external = `https:${href}`;
+  else if (href.startsWith("/")) external = `https://vi.wikipedia.org${href}`;
+  if (!/^https?:\/\//i.test(external)) return text;
+  return `<a href="${escapeAttr(external)}" target="_blank" rel="noopener noreferrer nofollow">${text}</a>`;
+}
 
 const UNWANTED_SECTIONS = [
   "chú thích",

@@ -13,6 +13,7 @@ export interface WikiSummary {
   thumbnail?: WikiThumbnail;
   pageUrl: string;
   description?: string;
+  timestamp?: string;
 }
 
 export interface TOCItem {

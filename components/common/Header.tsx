@@ -5,6 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Compass, BookOpen, Clock, Sparkles, Menu, X } from "lucide-react";
 
+const isActiveLink = (pathname: string, href: string) =>
+  href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`) || (href === "/doc/dai-viet" && pathname.startsWith("/doc"));
+
 export const Header: React.FC = () => {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,7 +20,7 @@ export const Header: React.FC = () => {
     { href: "/", label: "Tổng quan", icon: Sparkles },
     { href: "/timeline", label: "Tam Trục Niên Biểu", icon: Clock },
     { href: "/pathways", label: "Lộ Trình Thời Kỳ", icon: Compass },
-    { href: "/read/Đại_Việt", label: "Đọc Tư Liệu", icon: BookOpen },
+    { href: "/doc/dai-viet", label: "Đọc Tư Liệu", icon: BookOpen },
   ];
 
   return (
@@ -39,9 +42,9 @@ export const Header: React.FC = () => {
         </Link>
 
         {/* Thanh Menu điều hướng */}
-        <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+        <nav aria-label="Điều hướng chính" className="hidden md:flex items-center gap-1 lg:gap-2">
           {navLinks.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = isActiveLink(pathname, item.href);
             const Icon = item.icon;
             return (
               <Link
@@ -74,7 +77,7 @@ export const Header: React.FC = () => {
       {menuOpen && (
         <nav className="md:hidden border-t border-paper-300/40 bg-paper-50/95 px-4 py-3 space-y-1">
           {navLinks.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = isActiveLink(pathname, item.href);
             const Icon = item.icon;
             return (
               <Link

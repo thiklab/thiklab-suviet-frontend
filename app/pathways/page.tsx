@@ -1,11 +1,29 @@
 import React from "react";
 import Link from "next/link";
 import { HISTORICAL_ERAS } from "@/lib/constants/eras";
-import { Compass, Clock, ChevronRight, Bookmark } from "lucide-react";
+import { ChevronRight, Bookmark } from "lucide-react";
+import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbLd } from "@/lib/seo/jsonld";
+import { buildMetadata } from "@/lib/seo/meta";
+import { timelineHref } from "@/lib/seo/slug";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Năm thời kỳ lịch sử Việt Nam: từ Hồng Bàng đến hiện đại",
+  description:
+    "Lộ trình năm thời kỳ lịch sử Việt Nam từ Hồng Bàng, Bắc thuộc, quân chủ độc lập, Pháp thuộc đến hiện đại, kèm các mốc năm tiêu biểu để đối chiếu.",
+  path: "/pathways",
+});
 
 export default function PathwaysPage() {
   return (
-    <div className="min-h-screen py-10 sm:py-16 px-4 sm:px-6 max-w-6xl mx-auto">
+    <main className="min-h-screen py-10 sm:py-16 px-4 sm:px-6 max-w-6xl mx-auto">
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Trang chủ", path: "/" },
+          { name: "Lộ trình thời kỳ", path: "/pathways" },
+        ])}
+      />
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
         <span className="text-xs font-mono uppercase tracking-widest text-crimson block mb-2">
           Hệ thống hóa Tiến trình Dân tộc
@@ -58,7 +76,8 @@ export default function PathwaysPage() {
                 {era.featuredMilestones.map((yr) => (
                   <Link
                     key={yr}
-                    href={`/timeline?year=${yr > 0 ? yr : 938}`}
+                    href={timelineHref(yr)}
+                    aria-label={`Đối chiếu lịch sử năm ${yr > 0 ? yr : `${-yr} TCN`}`}
                     className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-paper-50 border border-paper-300 text-xs font-mono text-paper-900 hover:border-crimson hover:text-crimson transition-colors"
                   >
                     <span>{yr > 0 ? yr : `${Math.abs(yr)} TCN`}</span>
@@ -89,7 +108,8 @@ export default function PathwaysPage() {
               {era.featuredMilestones.map((yr) => (
                 <Link
                   key={yr}
-                  href={`/timeline?year=${yr > 0 ? yr : 938}`}
+                  href={timelineHref(yr)}
+                    aria-label={`Đối chiếu lịch sử năm ${yr > 0 ? yr : `${-yr} TCN`}`}
                   className="px-2.5 py-1 rounded-full bg-paper-50 border border-paper-300 text-[11px] font-mono text-paper-900"
                 >
                   {yr > 0 ? yr : `${Math.abs(yr)} TCN`}
@@ -99,7 +119,7 @@ export default function PathwaysPage() {
           </div>
         ))}
       </div>
-    </div>
+    </main>
   );
 }
 
