@@ -74,7 +74,7 @@ export default function PathwaysPage() {
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <span className="text-xs font-sans text-paper-800/60">Mốc năm tiêu biểu:</span>
                 {era.featuredMilestones.map((yr) => (
-                  <Link
+                  <Link prefetch={false}
                     key={yr}
                     href={timelineHref(yr)}
                     aria-label={`So sánh lịch sử năm ${yr > 0 ? yr : `${-yr} TCN`}`}
@@ -106,7 +106,7 @@ export default function PathwaysPage() {
             </div>
             <div className="flex flex-wrap gap-2">
               {era.featuredMilestones.map((yr) => (
-                <Link
+                <Link prefetch={false}
                   key={yr}
                   href={timelineHref(yr)}
                     aria-label={`So sánh lịch sử năm ${yr > 0 ? yr : `${-yr} TCN`}`}

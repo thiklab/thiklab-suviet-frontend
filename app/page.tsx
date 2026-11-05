@@ -48,7 +48,7 @@ export default function HomePage() {
           </p>
 
           <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
-            <Link
+            <Link prefetch={false}
               href="/timeline"
               className="px-6 py-3.5 rounded-full bg-paper-900 text-paper-50 font-serif text-sm hover:bg-crimson transition-all shadow-md flex items-center justify-center gap-2 group"
             >
@@ -56,7 +56,7 @@ export default function HomePage() {
               <span>Xem dòng thời gian</span>
               <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Link>
-            <Link
+            <Link prefetch={false}
               href="/pathways"
               className="px-6 py-3.5 rounded-full bg-paper-100 border border-paper-300 text-paper-900 font-serif text-sm hover:bg-paper-200 transition-all flex items-center justify-center gap-2"
             >
@@ -77,8 +77,8 @@ export default function HomePage() {
           bạn có thể đặt nó cạnh bối cảnh Trung Quốc và thế giới cùng thời điểm: chiến thắng Bạch Đằng năm 938 diễn ra khi Trung
           Hoa đang ở thời Ngũ đại Thập quốc; cuộc kháng chiến chống Nguyên Mông thế kỷ XIII gắn với sự trỗi dậy của đế quốc Mông Cổ.
           Mỗi mốc năm có phần so sánh Việt Nam, Trung Quốc và thế giới, danh sách sự kiện liên quan và liên kết sang bài viết chi tiết từ Wikipedia tiếng
-          Việt, được làm sạch để đọc thoải mái. Hãy bắt đầu từ <Link className="text-crimson underline" href={timelineHref(938)}>dòng thời gian năm 938</Link>{" "}
-          hoặc theo dõi <Link className="text-crimson underline" href="/pathways">5 giai đoạn lớn của lịch sử Việt Nam</Link>.
+          Việt, được làm sạch để đọc thoải mái. Hãy bắt đầu từ <Link prefetch={false} className="text-crimson underline" href={timelineHref(938)}>dòng thời gian năm 938</Link>{" "}
+          hoặc theo dõi <Link prefetch={false} className="text-crimson underline" href="/pathways">5 giai đoạn lớn của lịch sử Việt Nam</Link>.
         </p>
       </section>
 
@@ -93,7 +93,7 @@ export default function HomePage() {
               Các Mốc Năm Quan Trọng
             </h2>
           </div>
-          <Link
+          <Link prefetch={false}
             href="/timeline"
             className="text-xs font-sans font-medium text-crimson hover:underline flex items-center gap-1"
           >
@@ -104,7 +104,7 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredYears.map((item) => (
-            <Link
+            <Link prefetch={false}
               key={item.year}
               href={timelineHref(item.year)}
               aria-label={`${item.label} (${item.year}): so sánh với Trung Quốc và thế giới`}
@@ -170,7 +170,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-paper-100">
-                  <Link
+                  <Link prefetch={false}
                     href={`/pathways#${era.id}`}
                     className="text-[11px] font-sans font-medium text-crimson hover:underline flex items-center justify-between"
                   >

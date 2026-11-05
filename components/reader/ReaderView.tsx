@@ -157,7 +157,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
       {/* HEADER BÀI VIẾT */}
       <header className="border-b border-paper-300/40 py-8 sm:py-12 lg:py-16 bg-gradient-to-b from-paper-100/60 to-transparent">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <Link
+          <Link prefetch={false}
             href="/timeline"
             className="inline-flex items-center gap-1.5 text-xs font-sans text-paper-800/70 hover:text-crimson mb-6 transition-colors"
           >
@@ -324,7 +324,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
               <p className="text-xs font-serif text-paper-800/80 line-clamp-3 mb-3 leading-relaxed">
                 {previewState.data.extract || "Không có phần xem trước tóm tắt."}
               </p>
-              <Link
+              <Link prefetch={false}
                 href={docHref(previewState.data.title)}
                 className="block text-center text-xs font-sans py-1.5 px-3 bg-paper-100 hover:bg-crimson hover:text-white rounded-lg transition-colors font-medium text-paper-900"
               >
@@ -356,7 +356,7 @@ const RelatedEvents: React.FC<{
     <ul className="space-y-2.5 max-h-[45vh] overflow-y-auto pr-1 no-scrollbar">
       {events.map(([lane, y, title, wikiTitle]) => (
         <li key={`${lane}-${y}-${title}`}>
-          <Link href={docHref(wikiTitle)} className="group block">
+          <Link prefetch={false} href={docHref(wikiTitle)} className="group block">
             <span className="text-[11px] font-mono text-paper-800/60">
               {formatYear(y)} · {LANE_NAMES[lane]}
             </span>
@@ -367,7 +367,7 @@ const RelatedEvents: React.FC<{
         </li>
       ))}
     </ul>
-    <Link
+    <Link prefetch={false}
       href={timelineHref(year)}
       className="mt-3 inline-block text-[11px] font-sans font-medium text-crimson hover:underline"
     >

@@ -228,7 +228,7 @@ export const TimelineExplorer: React.FC<Props> = ({ initialYear, initialWiki, ch
           <h2>Mốc quan trọng — bấm để so sánh</h2>
           <div className="tl-keys">
             {KEY_YEARS.map((k) => (
-              <Link
+              <Link prefetch={false}
                 key={k}
                 href={timelineHref(k)}
                 scroll
@@ -292,7 +292,7 @@ const LaneCard: React.FC<LaneCardProps> = ({ lane, year, win, wikiEvents, wikiLo
                 {formatYear(e[1])} · {rel}
               </em>
             </button>
-            <Link className="tl-more" href={docHref(e[3])}>
+            <Link prefetch={false} className="tl-more" href={docHref(e[3])}>
               Đọc thêm<span className="sr-only"> về {e[2]}</span> →
             </Link>
           </div>
@@ -305,7 +305,7 @@ const LaneCard: React.FC<LaneCardProps> = ({ lane, year, win, wikiEvents, wikiLo
           {wikiEvents.map((ev) => (
             <div key={ev.id} className="tl-ev">
               <p>{ev.description}</p>
-              <Link className="tl-more" href={docHref(ev.wikiTitle || ev.title)}>
+              <Link prefetch={false} className="tl-more" href={docHref(ev.wikiTitle || ev.title)}>
                 Đọc thêm<span className="sr-only"> về {ev.title}</span> →
               </Link>
             </div>

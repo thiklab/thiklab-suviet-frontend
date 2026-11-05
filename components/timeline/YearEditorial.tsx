@@ -31,7 +31,7 @@ export function YearEditorial({ year, wiki }: Props) {
         {headline ? `${headline}. ` : ""}
         Vào năm {formatYear(year)}, Việt Nam đang ở giai đoạn <strong>{r.vn}</strong>, trong khi Trung Quốc thuộc giai đoạn{" "}
         <strong>{r.cn}</strong> và thế giới đang trải qua <strong>{r.wd}</strong>. Mốc năm này nằm trong giai đoạn{" "}
-        <Link href={`/pathways#${era.id}`}>{era.name}</Link> của lịch sử Việt Nam ({era.timeRange}).
+        <Link prefetch={false} href={`/pathways#${era.id}`}>{era.name}</Link> của lịch sử Việt Nam ({era.timeRange}).
       </p>
 
       {curated && (
@@ -41,7 +41,7 @@ export function YearEditorial({ year, wiki }: Props) {
             <p key={ev.id}>
               <strong>{ev.title}.</strong> {ev.description}{" "}
               {ev.wikiTitle && (
-                <Link href={docHref(ev.wikiTitle)}>
+                <Link prefetch={false} href={docHref(ev.wikiTitle)}>
                   Đọc bài {ev.wikiTitle}
                 </Link>
               )}
@@ -56,7 +56,7 @@ export function YearEditorial({ year, wiki }: Props) {
           <ul>
             {nearby.map((e) => (
               <li key={`${e[0]}-${e[1]}-${e[2]}`}>
-                <Link href={timelineHref(e[1])}>
+                <Link prefetch={false} href={timelineHref(e[1])}>
                   <time dateTime={e[1] > 0 ? String(e[1]).padStart(4, "0") : undefined}>{formatYear(e[1])}</time>: {e[2]}
                 </Link>
               </li>
@@ -70,11 +70,11 @@ export function YearEditorial({ year, wiki }: Props) {
         <ul>
           {neighbors.map((y) => (
             <li key={y}>
-              <Link href={timelineHref(y)}>So sánh lịch sử năm {formatYear(y)}</Link>
+              <Link prefetch={false} href={timelineHref(y)}>So sánh lịch sử năm {formatYear(y)}</Link>
             </li>
           ))}
           <li>
-            <Link href={`/pathways#${era.id}`}>Tổng quan giai đoạn {era.name}</Link>
+            <Link prefetch={false} href={`/pathways#${era.id}`}>Tổng quan giai đoạn {era.name}</Link>
           </li>
         </ul>
       </nav>

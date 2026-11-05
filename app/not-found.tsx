@@ -8,10 +8,10 @@ export default function NotFound() {
         Trang hoặc bài viết bạn tìm không tồn tại, hoặc đã được đổi đường dẫn.
       </p>
       <nav aria-label="Gợi ý điều hướng" className="flex flex-wrap justify-center gap-3 text-xs font-sans">
-        <Link href="/" className="px-5 py-2.5 rounded-full bg-paper-900 text-paper-50 hover:bg-crimson transition-colors">
+        <Link prefetch={false} href="/" className="px-5 py-2.5 rounded-full bg-paper-900 text-paper-50 hover:bg-crimson transition-colors">
           Về trang chủ
         </Link>
-        <Link href="/timeline/938" className="px-5 py-2.5 rounded-full bg-paper-100 border border-paper-300 text-paper-900 hover:bg-paper-200 transition-colors">
+        <Link prefetch={false} href="/timeline/938" className="px-5 py-2.5 rounded-full bg-paper-100 border border-paper-300 text-paper-900 hover:bg-paper-200 transition-colors">
           Xem dòng thời gian năm 938
         </Link>
       </nav>

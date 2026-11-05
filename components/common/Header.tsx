@@ -27,7 +27,7 @@ export const Header: React.FC = () => {
     <header className="sticky top-0 z-40 bg-paper-50/90 backdrop-blur-md border-b border-paper-300/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Logo mang phong cách ấn triện cổ điển */}
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link prefetch={false} href="/" className="flex items-center gap-3 group">
           <div className="w-9 h-9 rounded-xl bg-crimson flex items-center justify-center text-paper-50 font-serif font-bold text-lg shadow-sm transition-transform group-hover:scale-105">
             Sử
           </div>
@@ -47,7 +47,7 @@ export const Header: React.FC = () => {
             const isActive = isActiveLink(pathname, item.href);
             const Icon = item.icon;
             return (
-              <Link
+              <Link prefetch={false}
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs lg:text-sm font-serif transition-all whitespace-nowrap ${
@@ -80,7 +80,7 @@ export const Header: React.FC = () => {
             const isActive = isActiveLink(pathname, item.href);
             const Icon = item.icon;
             return (
-              <Link
+              <Link prefetch={false}
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-serif transition-colors ${
