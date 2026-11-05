@@ -8,11 +8,15 @@ export function cleanAndParseWikiHtml(rawHtml: string): { cleanHtml: string; toc
     /<table[^>]*class="[^"]*(infobox|navbox|metadata|ambox|vertical-navbox)[^"]*"[^>]*>[\s\S]*?<\/table>/gi,
     /<div[^>]*class="[^"]*(navbox|hatnote|mw-empty-elt|reflist|portal)[^"]*"[^>]*>[\s\S]*?<\/div>/gi,
     /<div[^>]*id="[^"]*(toc|mw-navigation)[^"]*"[^>]*>[\s\S]*?<\/div>/gi,
-    /<span[^>]*class="mw-editsection"[^>]*>[\s\S]*?<\/span>/gi,
+    /<sup[^>]*class="[^"]*\breference\b[^"]*"[^>]*>[\s\S]*?<\/sup>/gi,
+    /<sup[^>]*class="[^"]*\bnoprint\b[^"]*"[^>]*>[\s\S]*?<\/sup>/gi,
+    /<a[^>]*href="[^"]*#cite_(?:note|ref)[^"]*"[^>]*>[\s\S]*?<\/a>/gi,
     /<style[^>]*>[\s\S]*?<\/style>/gi,
     /<script[^>]*>[\s\S]*?<\/script>/gi,
     /<!--[\s\S]*?-->/gi,
   ];
+
+  html = removeBalancedTags(html, "span", /mw-editsection/);
 
   unwantedPatterns.forEach((pattern) => {
     html = html.replace(pattern, "");
@@ -96,6 +100,34 @@ function removeUnwantedSections(html: string): string {
     if (start < cursor) continue;
     result += html.slice(cursor, start);
     cursor = end;
+  }
+  return result + html.slice(cursor);
+}
+
+// Xóa thẻ (kể cả lồng nhau) có class khớp pattern, ví dụ "[sửa | sửa mã nguồn]"
+function removeBalancedTags(html: string, tag: string, classPattern: RegExp): string {
+  const openRe = new RegExp(`<${tag}\\b[^>]*class="([^"]*)"[^>]*>`, "gi");
+  const tokenRe = new RegExp(`<(/?)${tag}\\b[^>]*>`, "gi");
+  let result = "";
+  let cursor = 0;
+  let m: RegExpExecArray | null;
+
+  while ((m = openRe.exec(html))) {
+    if (m.index < cursor || !classPattern.test(m[1])) continue;
+    tokenRe.lastIndex = m.index;
+    let depth = 0;
+    let end = html.length;
+    let t: RegExpExecArray | null;
+    while ((t = tokenRe.exec(html))) {
+      depth += t[1] ? -1 : 1;
+      if (depth === 0) {
+        end = t.index + t[0].length;
+        break;
+      }
+    }
+    result += html.slice(cursor, m.index);
+    cursor = end;
+    openRe.lastIndex = end;
   }
   return result + html.slice(cursor);
 }
