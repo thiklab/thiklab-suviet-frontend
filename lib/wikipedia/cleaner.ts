@@ -17,6 +17,7 @@ export function cleanAndParseWikiHtml(rawHtml: string): { cleanHtml: string; toc
   ];
 
   html = removeBalancedTags(html, "span", /mw-editsection/);
+  html = removeBalancedTags(html, "sup", /(^|\s)(mw-ref|reference)(\s|$)/);
 
   unwantedPatterns.forEach((pattern) => {
     html = html.replace(pattern, "");
@@ -53,6 +54,8 @@ export function cleanAndParseWikiHtml(rawHtml: string): { cleanHtml: string; toc
     const decodedTitle = decodeURIComponent(wikiSlug).replace(/_/g, " ");
     return `<a href="/read/${encodeURIComponent(decodedTitle)}" class="wiki-preview-link" data-wiki-title="${decodedTitle}">${text}</a>`;
   });
+
+  html = removeBalancedTags(html, "span", /mw-editsection/);
 
   return { cleanHtml: html, toc };
 }
@@ -106,7 +109,7 @@ function removeUnwantedSections(html: string): string {
 
 // Xóa thẻ (kể cả lồng nhau) có class khớp pattern, ví dụ "[sửa | sửa mã nguồn]"
 function removeBalancedTags(html: string, tag: string, classPattern: RegExp): string {
-  const openRe = new RegExp(`<${tag}\\b[^>]*class="([^"]*)"[^>]*>`, "gi");
+  const openRe = new RegExp(`<${tag}\\b[^>]*\\bclass\\s*=\\s*["']([^"']*)["'][^>]*>`, "gi");
   const tokenRe = new RegExp(`<(/?)${tag}\\b[^>]*>`, "gi");
   let result = "";
   let cursor = 0;

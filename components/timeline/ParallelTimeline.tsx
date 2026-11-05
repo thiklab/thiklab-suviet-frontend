@@ -244,7 +244,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, badgeColor }) => {
           href={`/read/${encodeURIComponent(event.wikiTitle)}`}
           className="inline-flex items-center gap-1.5 text-xs font-sans font-medium text-crimson hover:text-crimson-deep transition-colors group"
         >
-          <span>Khám phá sâu tư liệu</span>
+          <span>Đọc thêm</span>
           <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
         </Link>
       )}
