@@ -17,7 +17,7 @@ export const metadata: Metadata = buildMetadata({
 
 export default function PathwaysPage() {
   return (
-    <main className="min-h-screen py-10 sm:py-16 px-4 sm:px-6 max-w-6xl mx-auto">
+    <main className="min-h-screen py-10 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto">
       <JsonLd
         data={breadcrumbLd([
           { name: "Trang chủ", path: "/" },
