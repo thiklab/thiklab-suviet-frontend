@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { WikiArticle, WikiSummary } from "@/types/history";
 import { Icon } from "@/components/common/Icon";
 import Link from "next/link";
-import Image from "next/image";
 import { docLinkHref, timelineHref } from "@/lib/seo/slug";
 import {
   LANE_NAMES,
@@ -128,7 +127,6 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
             title: json.title,
             displayTitle: stripHtmlTags(json.titles?.display || json.title),
             extract: json.extract,
-            thumbnail: json.thumbnail,
             pageUrl: json.content_urls?.desktop?.page,
             description: json.description,
           };
@@ -307,17 +305,6 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
             </div>
           ) : previewState.data ? (
             <div>
-              {previewState.data.thumbnail && (
-                <div className="relative w-full h-32 mb-3 rounded-lg overflow-hidden bg-paper-100">
-                  <Image
-                    src={previewState.data.thumbnail.source}
-                    alt={`Ảnh minh họa: ${previewState.data.displayTitle}`}
-                    fill
-                    sizes="320px"
-                    className="object-cover"
-                  />
-                </div>
-              )}
               <h5 className="font-serif font-bold text-sm text-paper-900 mb-1 leading-tight">
                 {previewState.data.displayTitle}
               </h5>
