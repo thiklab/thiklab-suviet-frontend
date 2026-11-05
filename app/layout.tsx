@@ -67,6 +67,16 @@ export default function RootLayout({
             <p>
               Dữ liệu tư liệu mở được trích xuất và chuẩn hóa từ Wikipedia tiếng Việt (giấy phép CC BY-SA 4.0).
             </p>
+            <p>
+              <a
+                href="https://tuan.thich.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-crimson transition-colors"
+              >
+                from Tuan Nguyen built with ❤️
+              </a>
+            </p>
           </div>
         </footer>
       </body>
