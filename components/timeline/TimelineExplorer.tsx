@@ -286,14 +286,9 @@ const LaneCard: React.FC<LaneCardProps> = ({ lane, year, win, wikiEvents, wikiLo
                 {formatYear(e[1])} · {rel}
               </em>
             </button>
-            <a
-              className="tl-more"
-              href={`https://vi.wikipedia.org/w/index.php?search=${encodeURIComponent(e[2])}`}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <Link className="tl-more" href={`/read/${encodeURIComponent(e[3])}`}>
               Đọc thêm →
-            </a>
+            </Link>
           </div>
         );
       })}
@@ -304,20 +299,9 @@ const LaneCard: React.FC<LaneCardProps> = ({ lane, year, win, wikiEvents, wikiLo
           {wikiEvents.map((ev) => (
             <div key={ev.id} className="tl-ev">
               <p>{ev.description}</p>
-              {ev.wikiTitle ? (
-                <Link className="tl-more" href={`/read/${encodeURIComponent(ev.wikiTitle)}`}>
-                  Đọc thêm →
-                </Link>
-              ) : (
-                <a
-                  className="tl-more"
-                  href={`https://vi.wikipedia.org/w/index.php?search=${encodeURIComponent(ev.title)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Đọc thêm →
-                </a>
-              )}
+              <Link className="tl-more" href={`/read/${encodeURIComponent(ev.wikiTitle || ev.title)}`}>
+                Đọc thêm →
+              </Link>
             </div>
           ))}
         </div>

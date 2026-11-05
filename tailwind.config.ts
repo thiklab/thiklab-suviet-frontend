@@ -29,9 +29,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ["var(--font-lora)", "Georgia", "Cambria", "serif"],
-        sans: ["var(--font-sans)", "system-ui", "-apple-system", "sans-serif"],
-        display: ["var(--font-cinzel)", "Georgia", "serif"],
+        serif: ["var(--font-be-vietnam)", "system-ui", "-apple-system", "sans-serif"],
+        sans: ["var(--font-be-vietnam)", "system-ui", "-apple-system", "sans-serif"],
+        display: ["var(--font-be-vietnam)", "system-ui", "-apple-system", "sans-serif"],
       },
       boxShadow: {
         editorial: "0 2px 20px -2px rgba(30, 25, 23, 0.05), 0 1px 4px -1px rgba(30, 25, 23, 0.03)",

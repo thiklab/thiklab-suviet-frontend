@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
-import { Lora, Plus_Jakarta_Sans } from "next/font/google";
+import { Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/common/Header";
 
-const lora = Lora({
-  subsets: ["latin", "vietnamese"],
-  variable: "--font-lora",
-  display: "swap",
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin", "vietnamese"],
-  variable: "--font-sans",
+const beVietnam = Be_Vietnam_Pro({
+  subsets: ["latin", "latin-ext", "vietnamese"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-be-vietnam",
   display: "swap",
 });
 
@@ -26,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${lora.variable} ${plusJakarta.variable}`}>
+    <html lang="vi" className={beVietnam.variable}>
       <body className="min-h-screen bg-paper-50 text-paper-900 font-serif antialiased selection:bg-crimson/15 selection:text-crimson-deep flex flex-col">
         <Header />
         <div className="flex-1">{children}</div>

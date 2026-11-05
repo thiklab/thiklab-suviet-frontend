@@ -54,7 +54,28 @@ export async function fetchWikiSummary(title: string): Promise<WikiSummary | nul
 }
 
 export async function fetchWikiArticle(title: string): Promise<WikiArticle | null> {
-  return cached(`suviet:article:v1:${title}`, 60 * 60 * 24, () => loadWikiArticle(title));
+  return cached(`suviet:article:v1:${title}`, 60 * 60 * 24, async () => {
+    const direct = await loadWikiArticle(title);
+    if (direct) return direct;
+
+    // Tiêu đề không khớp chính xác: tìm bài gần đúng nhất
+    const found = await searchWikiTitle(title);
+    return found && found !== title ? loadWikiArticle(found) : null;
+  });
+}
+
+async function searchWikiTitle(query: string): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `${WIKI_ACTION_BASE}?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=1&format=json&origin=*`,
+      { headers: WIKI_HEADERS, next: { revalidate: 86400 } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.query?.search?.[0]?.title ?? null;
+  } catch {
+    return null;
+  }
 }
 
 async function loadWikiArticle(title: string): Promise<WikiArticle | null> {
