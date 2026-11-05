@@ -4,14 +4,17 @@ import { cleanAndParseWikiHtml } from "./cleaner";
 const WIKI_REST_BASE = "https://vi.wikipedia.org/api/rest_v1";
 const WIKI_ACTION_BASE = "https://vi.wikipedia.org/w/api.php";
 
+const WIKI_HEADERS = {
+  "User-Agent": "SuVietExplorer/1.0 (https://suviet.dev; contact@suviet.dev)",
+  "Api-User-Agent": "SuVietExplorer/1.0 (https://suviet.dev; contact@suviet.dev)",
+  Accept: "application/json",
+};
+
 export async function fetchWikiSummary(title: string): Promise<WikiSummary | null> {
   try {
     const url = `${WIKI_REST_BASE}/page/summary/${encodeURIComponent(title.replace(/ /g, "_"))}`;
     const res = await fetch(url, {
-      headers: {
-        "User-Agent": "SuVietExplorer/1.0 (https://suviet.dev; contact@suviet.dev)",
-        Accept: "application/json",
-      },
+      headers: WIKI_HEADERS,
       next: { revalidate: 86400 }, // Cache 24 giờ
     });
 
@@ -44,7 +47,7 @@ export async function fetchWikiArticle(title: string): Promise<WikiArticle | nul
       fetchWikiSummary(title),
       fetch(
         `${WIKI_ACTION_BASE}?action=parse&page=${encodeURIComponent(title)}&prop=text&format=json&origin=*`,
-        { next: { revalidate: 86400 } }
+        { headers: WIKI_HEADERS, next: { revalidate: 86400 } }
       ),
     ]);
 
