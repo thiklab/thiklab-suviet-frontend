@@ -2,10 +2,10 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { docHref } from "@/lib/seo/slug";
 
 // Đường dẫn cũ /read/<Tiêu_đề> chuyển vĩnh viễn sang /doc/<slug>
-export default function LegacyReadPage({ params }: { params: { slug: string } }) {
+export default async function LegacyReadPage({ params }: { params: Promise<{ slug: string }> }) {
   let title: string;
   try {
-    title = decodeURIComponent(params.slug).replace(/_/g, " ").trim();
+    title = decodeURIComponent((await params).slug).replace(/_/g, " ").trim();
   } catch {
     notFound();
   }

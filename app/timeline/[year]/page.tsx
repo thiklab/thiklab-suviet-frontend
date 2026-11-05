@@ -12,8 +12,9 @@ export function generateStaticParams() {
   return INDEXED_YEARS.map((y) => ({ year: yearToSlug(y) }));
 }
 
-export function generateMetadata({ params }: { params: { year: string } }): Metadata {
-  const year = slugToYear(params.year);
+export async function generateMetadata({ params }: { params: Promise<{ year: string }> }): Promise<Metadata> {
+  const { year: yearParam } = await params;
+  const year = slugToYear(yearParam);
   if (year === null) return { title: "Không tìm thấy năm", robots: { index: false } };
   return buildMetadata({
     title: yearTitle(year),
@@ -23,9 +24,10 @@ export function generateMetadata({ params }: { params: { year: string } }): Meta
   });
 }
 
-export default function TimelineYearPage({ params }: { params: { year: string } }) {
-  const year = slugToYear(params.year);
+export default async function TimelineYearPage({ params }: { params: Promise<{ year: string }> }) {
+  const { year: yearParam } = await params;
+  const year = slugToYear(yearParam);
   if (year === null) notFound();
-  if (params.year !== yearToSlug(year)) permanentRedirect(yearPath(year));
+  if (yearParam !== yearToSlug(year)) permanentRedirect(yearPath(year));
   return <YearView year={year} />;
 }

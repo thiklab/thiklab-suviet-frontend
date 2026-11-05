@@ -8,8 +8,8 @@ export const size = OG_SIZE;
 export const contentType = "image/png";
 export const alt = "Tư liệu lịch sử Việt Nam";
 
-export default async function Image({ params }: { params: { slug: string } }) {
-  const title = await resolveDocTitle(params.slug);
+export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
+  const title = await resolveDocTitle((await params).slug);
   const summary = title ? await fetchWikiSummary(title) : null;
   return renderOg({
     eyebrow: "Tư liệu lịch sử",

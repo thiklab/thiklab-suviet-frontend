@@ -8,8 +8,8 @@ export const size = OG_SIZE;
 export const contentType = "image/png";
 export const alt = "Dòng thời gian theo năm";
 
-export default function Image({ params }: { params: { year: string } }) {
-  const year = slugToYear(params.year);
+export default async function Image({ params }: { params: Promise<{ year: string }> }) {
+  const year = slugToYear((await params).year);
   if (year === null) return renderOg({ title: "Dòng thời gian lịch sử" });
   const r = regimeSummary(year);
   return renderOg({

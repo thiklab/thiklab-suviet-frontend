@@ -23,8 +23,9 @@ const loadArticle = cache(async (slug: string) => {
   return title ? fetchWikiArticle(title) : null;
 });
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const article = await loadArticle(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await loadArticle(slug);
   if (!article) return { title: "Không tìm thấy bài viết", robots: { index: false } };
 
   const canonicalSlug = slugify(article.title);
@@ -42,12 +43,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   });
 }
 
-export default async function DocPage({ params }: { params: { slug: string } }) {
-  const article = await loadArticle(params.slug);
+export default async function DocPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const article = await loadArticle(slug);
   if (!article) notFound();
 
   const canonicalSlug = slugify(article.title);
-  if (canonicalSlug !== params.slug) permanentRedirect(`/doc/${canonicalSlug}`);
+  if (canonicalSlug !== slug) permanentRedirect(`/doc/${canonicalSlug}`);
 
   const path = `/doc/${canonicalSlug}`;
   const modified = article.summary?.timestamp ?? CONTENT_LAST_MODIFIED;
