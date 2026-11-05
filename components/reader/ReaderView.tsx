@@ -179,7 +179,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
       </header>
 
       {/* THÂN BÀI VIẾT: GRID 12 CỘT */}
-      <div className="max-w-4xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
         <div className="grid grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* NỘI DUNG CHÍNH (8 CỘT) */}
           <article
