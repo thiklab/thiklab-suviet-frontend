@@ -79,3 +79,26 @@ export function regimeAt(lane: Lane, y: number): { current: [number, string]; ne
   for (let i = 0; i < list.length; i++) if (list[i][0] <= y) k = i;
   return { current: list[k], nextStart: list[k + 1] ? list[k + 1][0] : null };
 }
+
+// Suy ra năm của bài viết từ tiêu đề, mô tả hoặc đoạn mở đầu
+export function guessArticleYear(...texts: (string | undefined)[]): number | null {
+  const patterns = [/\((?:năm\s*)?(\d{3,4})\)/i, /\bnăm\s+(\d{3,4})\b/i, /\b(\d{3,4})\b/];
+  for (const text of texts) {
+    if (!text) continue;
+    for (const re of patterns) {
+      const m = re.exec(text);
+      if (m) {
+        const y = parseInt(m[1], 10);
+        if (y >= 100 && y <= MAX_YEAR) return y;
+      }
+    }
+  }
+  return null;
+}
+
+export function eventsAroundYear(year: number, excludeTitle: string, win = 50, limit = 8) {
+  return EVENTS.filter((e) => e[3] !== excludeTitle && Math.abs(e[1] - year) <= win)
+    .sort((a, b) => Math.abs(a[1] - year) - Math.abs(b[1] - year) || a[1] - b[1])
+    .slice(0, limit)
+    .sort((a, b) => a[1] - b[1]);
+}

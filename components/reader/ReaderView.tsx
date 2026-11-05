@@ -2,8 +2,14 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { WikiArticle, WikiSummary } from "@/types/history";
-import { ExternalLink, List, BookOpen, ChevronLeft } from "lucide-react";
+import { ExternalLink, List, BookOpen, ChevronLeft, Clock } from "lucide-react";
 import Link from "next/link";
+import {
+  LANE_NAMES,
+  eventsAroundYear,
+  formatYear,
+  guessArticleYear,
+} from "@/lib/constants/timeline-data";
 
 const stripHtmlTags = (html: string) => html.replace(/<[^>]*>/g, "").trim();
 
@@ -31,6 +37,10 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
     data: null,
     isLoading: false,
   });
+
+  const articleYear = guessArticleYear(article.title, article.summary?.description, article.summary?.extract);
+  const relatedEvents =
+    articleYear !== null ? eventsAroundYear(articleYear, article.title.replace(/_/g, " ")) : [];
 
   const hoverTimerRef = useRef<NodeJS.Timeout | null>(null);
   const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -205,6 +215,12 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
             </div>
           </main>
 
+          {articleYear !== null && relatedEvents.length > 0 && (
+            <div className="col-span-12 lg:hidden">
+              <RelatedEvents year={articleYear} events={relatedEvents} />
+            </div>
+          )}
+
           {/* SIDEBAR MỤC LỤC CỐ ĐỊNH (4 CỘT) */}
           <aside className="hidden lg:block col-span-4 sticky top-24 space-y-6">
             <div className="bg-paper-100/70 p-6 rounded-2xl border border-paper-300/50 backdrop-blur-sm">
@@ -237,6 +253,10 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
                 })}
               </nav>
             </div>
+
+            {articleYear !== null && relatedEvents.length > 0 && (
+              <RelatedEvents year={articleYear} events={relatedEvents} />
+            )}
           </aside>
         </div>
       </div>
@@ -289,3 +309,36 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
   );
 };
 
+
+const RelatedEvents: React.FC<{
+  year: number;
+  events: ReturnType<typeof eventsAroundYear>;
+}> = ({ year, events }) => (
+  <div className="bg-paper-100/70 p-6 rounded-2xl border border-paper-300/50 backdrop-blur-sm">
+    <div className="flex items-center gap-2 mb-1 text-paper-900 font-serif font-bold text-sm">
+      <Clock className="w-4 h-4 text-crimson" />
+      <span>Cùng thời kỳ</span>
+    </div>
+    <p className="text-[11px] font-sans text-paper-800/60 mb-3">Các sự kiện quanh năm {formatYear(year)}</p>
+    <ul className="space-y-2.5 max-h-[45vh] overflow-y-auto pr-1 no-scrollbar">
+      {events.map(([lane, y, title, wikiTitle]) => (
+        <li key={`${lane}-${y}-${title}`}>
+          <Link href={`/read/${encodeURIComponent(wikiTitle)}`} className="group block">
+            <span className="text-[11px] font-mono text-paper-800/60">
+              {formatYear(y)} · {LANE_NAMES[lane]}
+            </span>
+            <span className="block text-xs font-serif leading-snug text-paper-900 group-hover:text-crimson transition-colors">
+              {title}
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+    <Link
+      href={`/timeline?year=${year}`}
+      className="mt-3 inline-block text-[11px] font-sans font-medium text-crimson hover:underline"
+    >
+      Xem trên niên biểu →
+    </Link>
+  </div>
+);
