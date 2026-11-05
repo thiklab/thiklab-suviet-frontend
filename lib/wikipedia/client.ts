@@ -1,6 +1,7 @@
 import { WikiArticle, WikiSummary } from "@/types/history";
 import { cleanAndParseWikiHtml } from "./cleaner";
-import { cached } from "@/lib/cache/redis";
+import { cached, saveSlugTitles } from "@/lib/cache/redis";
+import { slugify } from "@/lib/seo/slug";
 
 const WIKI_REST_BASE = "https://vi.wikipedia.org/api/rest_v1";
 const WIKI_ACTION_BASE = "https://vi.wikipedia.org/w/api.php";
@@ -54,7 +55,27 @@ export async function fetchWikiSummary(title: string): Promise<WikiSummary | nul
   }
 }
 
+const unescapeAttr = (s: string) =>
+  s.replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+
+// Ghi nhớ slug của mọi bài được liên kết để /doc/<slug> tra ngược ra đúng tiêu đề
+function rememberLinkedTitles(article: WikiArticle) {
+  const entries: Record<string, string> = { [slugify(article.title)]: article.title };
+  for (const m of Array.from(article.cleanHtml.matchAll(/data-wiki-title="([^"]+)"/g))) {
+    const t = unescapeAttr(m[1]);
+    const slug = slugify(t);
+    if (slug) entries[slug] = t;
+  }
+  return saveSlugTitles(entries);
+}
+
 export async function fetchWikiArticle(title: string): Promise<WikiArticle | null> {
+  const article = await fetchWikiArticleCached(title);
+  if (article) await rememberLinkedTitles(article);
+  return article;
+}
+
+async function fetchWikiArticleCached(title: string): Promise<WikiArticle | null> {
   return cached(`suviet:article:v2:${title}`, 60 * 60 * 24, async () => {
     const direct = await loadWikiArticle(title);
     if (direct) return direct;

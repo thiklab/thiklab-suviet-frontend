@@ -74,3 +74,26 @@ export async function cached<T>(
   }
   return isEmpty ? null : value;
 }
+
+const SLUG_MAP_KEY = "suviet:slugmap:v1";
+
+// Ánh xạ slug -> tiêu đề Wikipedia gốc (slug bỏ dấu nên không thể suy ngược bằng tìm kiếm)
+export async function getSlugTitle(slug: string): Promise<string | null> {
+  const client = getClient();
+  if (!client) return null;
+  try {
+    return await client.hget(SLUG_MAP_KEY, slug);
+  } catch {
+    return null;
+  }
+}
+
+export async function saveSlugTitles(entries: Record<string, string>): Promise<void> {
+  const client = getClient();
+  if (!client || Object.keys(entries).length === 0) return;
+  try {
+    await client.hset(SLUG_MAP_KEY, entries);
+  } catch (err) {
+    warnWrite(err);
+  }
+}

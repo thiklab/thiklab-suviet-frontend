@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { CURATED_MILESTONES } from "@/lib/constants/milestones";
 import { EVENTS } from "@/lib/constants/timeline-data";
-import { cached } from "@/lib/cache/redis";
+import { cached, getSlugTitle } from "@/lib/cache/redis";
 import { searchWikiTitles } from "@/lib/wikipedia/client";
 import { slugify } from "./slug";
 
@@ -27,11 +27,14 @@ export const resolveDocTitle = cache(async (slug: string): Promise<string | null
   const known = DOC_REGISTRY.get(slug);
   if (known) return known;
 
+  const remembered = await getSlugTitle(slug);
+  if (remembered) return remembered;
+
   return cached<string>(
     `suviet:slug:v1:${slug}`,
     60 * 60 * 24 * 7,
     async () => {
-      const results = await searchWikiTitles(slug.replace(/-/g, " "), 5);
+      const results = await searchWikiTitles(slug.replace(/-/g, " "), 10);
       return results.find((t) => slugify(t) === slug) ?? null;
     },
     { negativeTtl: 60 * 60 }
