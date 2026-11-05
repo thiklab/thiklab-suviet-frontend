@@ -33,6 +33,29 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
   });
 
   const hoverTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const currentTitleRef = useRef<string>("");
+  const cacheRef = useRef<Map<string, WikiSummary | null>>(new Map());
+
+  const cancelClose = () => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+  };
+
+  const scheduleClose = () => {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    cancelClose();
+    closeTimerRef.current = setTimeout(() => {
+      currentTitleRef.current = "";
+      setPreviewState((prev) => ({ ...prev, isOpen: false }));
+    }, 200);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+      cancelClose();
+    };
+  }, []);
 
   // 1. SCROLLSPY THEO DÕI VỊ TRÍ ĐỌC
   useEffect(() => {
@@ -55,61 +78,65 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
 
   // 2. SỰ KIỆN HOVER ĐỂ HIỂN THỊ WIKI POPUP PREVIEW
   const handleMouseOver = (e: React.MouseEvent) => {
-    const target = (e.target as HTMLElement).closest(".wiki-preview-link") as HTMLElement;
+    const target = (e.target as HTMLElement).closest(".wiki-preview-link") as HTMLElement | null;
     if (!target) return;
 
     const title = target.getAttribute("data-wiki-title");
     if (!title) return;
 
+    cancelClose();
+    // Đang hiển thị/đang chờ đúng link này thì không làm lại
+    if (currentTitleRef.current === title) return;
+    currentTitleRef.current = title;
+
     const rect = target.getBoundingClientRect();
     const x = Math.max(16, Math.min(rect.left + window.scrollX, window.innerWidth - 340));
-    const y = rect.bottom + window.scrollY + 8;
+    const y = rect.bottom + window.scrollY;
 
     if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
 
     hoverTimerRef.current = setTimeout(async () => {
-      setPreviewState({
-        isOpen: true,
-        title,
-        x,
-        y,
-        data: null,
-        isLoading: true,
-      });
+      const cached = cacheRef.current.get(title);
+      if (cached !== undefined) {
+        setPreviewState({ isOpen: true, title, x, y, data: cached, isLoading: false });
+        return;
+      }
 
+      setPreviewState({ isOpen: true, title, x, y, data: null, isLoading: true });
+
+      let data: WikiSummary | null = null;
       try {
         const res = await fetch(
           `https://vi.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.replace(/ /g, "_"))}`
         );
         if (res.ok) {
-          const data = await res.json();
-          setPreviewState((prev) => ({
-            ...prev,
-            data: {
-              title: data.title,
-              displayTitle: stripHtmlTags(data.titles?.display || data.title),
-              extract: data.extract,
-              thumbnail: data.thumbnail,
-              pageUrl: data.content_urls?.desktop?.page,
-              description: data.description,
-            },
-            isLoading: false,
-          }));
-        } else {
-          setPreviewState((prev) => ({ ...prev, isLoading: false }));
+          const json = await res.json();
+          data = {
+            title: json.title,
+            displayTitle: stripHtmlTags(json.titles?.display || json.title),
+            extract: json.extract,
+            thumbnail: json.thumbnail,
+            pageUrl: json.content_urls?.desktop?.page,
+            description: json.description,
+          };
         }
       } catch {
-        setPreviewState((prev) => ({ ...prev, isLoading: false }));
+        data = null;
       }
+
+      cacheRef.current.set(title, data);
+      if (currentTitleRef.current !== title) return;
+      setPreviewState((prev) => ({ ...prev, data, isLoading: false }));
     }, 280);
   };
 
   const handleMouseOut = (e: React.MouseEvent) => {
-    const relatedTarget = e.relatedTarget as HTMLElement;
-    if (relatedTarget?.closest(".wiki-hover-popover")) return;
-
-    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
-    setPreviewState((prev) => ({ ...prev, isOpen: false }));
+    const related = e.relatedTarget as HTMLElement | null;
+    // Di chuyển trong cùng một link hoặc sang popover thì không đóng
+    if (related?.closest?.(".wiki-hover-popover")) return;
+    const from = (e.target as HTMLElement).closest(".wiki-preview-link");
+    if (from && related?.closest?.(".wiki-preview-link") === from) return;
+    scheduleClose();
   };
 
   return (
@@ -216,12 +243,10 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
       {/* WIKI PREVIEW POPOVER TOOLTIP */}
       {previewState.isOpen && (
         <div
-          onMouseEnter={() => {
-            if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
-          }}
-          onMouseLeave={() => setPreviewState((p) => ({ ...p, isOpen: false }))}
+          onMouseEnter={cancelClose}
+          onMouseLeave={scheduleClose}
           style={{ top: previewState.y, left: previewState.x }}
-          className="wiki-hover-popover absolute z-50 w-80 bg-white rounded-2xl shadow-popover border border-paper-300 p-4 transition-opacity animate-in fade-in duration-200"
+          className="wiki-hover-popover absolute z-50 w-80 bg-white rounded-2xl shadow-popover border border-paper-300 p-4 mt-2"
         >
           {previewState.isLoading ? (
             <div className="flex items-center justify-center py-6 gap-2 text-paper-800/50 text-xs font-sans">
