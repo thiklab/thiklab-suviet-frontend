@@ -50,6 +50,7 @@ export async function fetchYearParallelEvents(year: number): Promise<ParallelTim
 
       if (cleanLine.length < 15) continue;
 
+      const wikiTitle = extractWikiTitle(rawLine);
       const lower = cleanLine.toLowerCase();
       eventIndex++;
 
@@ -62,6 +63,7 @@ export async function fetchYearParallelEvents(year: number): Promise<ParallelTim
         axis: isVN ? "vietnam" : isChina ? "china" : "world",
         title: cleanLine.split(/[-–:]/)[0].trim().slice(0, 80),
         description: cleanLine,
+        wikiTitle,
         tag: isVN ? "Sử Việt" : isChina ? "Phương Bắc" : "Toàn cầu",
       };
 
@@ -84,3 +86,18 @@ function getEraIdFromYear(year: number): string {
   return "hien-dai";
 }
 
+
+// Lấy liên kết bài viết đầu tiên đủ ý nghĩa (bỏ qua năm, ngày tháng, không gian tên đặc biệt)
+function extractWikiTitle(rawLine: string): string | undefined {
+  const re = /\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|[^\]]*)?\]\]/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(rawLine))) {
+    const title = m[1].trim();
+    if (title.includes(":")) continue;
+    if (/^\d+(\s*(TCN|BC))?$/i.test(title)) continue;
+    if (/^\d{1,2}\s+tháng\s+\d{1,2}$/i.test(title)) continue;
+    if (/^tháng\s+\d{1,2}$/i.test(title)) continue;
+    return title;
+  }
+  return undefined;
+}

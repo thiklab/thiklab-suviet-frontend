@@ -239,7 +239,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, badgeColor }) => {
         {event.description}
       </p>
 
-      {event.wikiTitle && (
+      {event.wikiTitle ? (
         <Link
           href={`/read/${encodeURIComponent(event.wikiTitle)}`}
           className="inline-flex items-center gap-1.5 text-xs font-sans font-medium text-crimson hover:text-crimson-deep transition-colors group"
