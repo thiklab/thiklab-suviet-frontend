@@ -18,6 +18,13 @@ export function cleanAndParseWikiHtml(rawHtml: string): { cleanHtml: string; toc
     html = html.replace(pattern, "");
   });
 
+  // 1b. Cắt bỏ toàn bộ các phần không cần thiết (cả tiêu đề lẫn nội dung)
+  html = html.replace(
+    /<div[^>]*class="[^"]*mw-heading[^"]*"[^>]*>\s*(<h[1-6][\s\S]*?<\/h[1-6]>)\s*<\/div>/gi,
+    "$1"
+  );
+  html = removeUnwantedSections(html);
+
   // 2. Trích xuất mục lục (TOC) từ các thẻ <h2> và <h3>
   const toc: TOCItem[] = [];
   let headingIndex = 0;
@@ -46,3 +53,49 @@ export function cleanAndParseWikiHtml(rawHtml: string): { cleanHtml: string; toc
   return { cleanHtml: html, toc };
 }
 
+
+const UNWANTED_SECTIONS = [
+  "chú thích",
+  "tham khảo",
+  "tài liệu tham khảo",
+  "xem thêm",
+  "thư mục",
+  "liên kết ngoài",
+  "nguồn",
+];
+
+// Xóa từ tiêu đề không cần thiết đến tiêu đề cùng cấp hoặc cao hơn kế tiếp
+function removeUnwantedSections(html: string): string {
+  const headingRe = /<h([2-6])[^>]*>([\s\S]*?)<\/h\1>/gi;
+  const headings: { start: number; level: number; text: string }[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = headingRe.exec(html))) {
+    headings.push({
+      start: m.index,
+      level: parseInt(m[1], 10),
+      text: m[2].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim().toLowerCase(),
+    });
+  }
+
+  const ranges: [number, number][] = [];
+  for (let i = 0; i < headings.length; i++) {
+    if (!UNWANTED_SECTIONS.includes(headings[i].text)) continue;
+    let end = html.length;
+    for (let j = i + 1; j < headings.length; j++) {
+      if (headings[j].level <= headings[i].level) {
+        end = headings[j].start;
+        break;
+      }
+    }
+    ranges.push([headings[i].start, end]);
+  }
+
+  let result = "";
+  let cursor = 0;
+  for (const [start, end] of ranges) {
+    if (start < cursor) continue;
+    result += html.slice(cursor, start);
+    cursor = end;
+  }
+  return result + html.slice(cursor);
+}
