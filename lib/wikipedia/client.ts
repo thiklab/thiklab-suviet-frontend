@@ -10,6 +10,17 @@ const WIKI_HEADERS = {
   Accept: "application/json",
 };
 
+export function stripHtmlTags(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;/g, "'")
+    .trim();
+}
+
 export async function fetchWikiSummary(title: string): Promise<WikiSummary | null> {
   try {
     const url = `${WIKI_REST_BASE}/page/summary/${encodeURIComponent(title.replace(/ /g, "_"))}`;
@@ -23,7 +34,7 @@ export async function fetchWikiSummary(title: string): Promise<WikiSummary | nul
 
     return {
       title: data.title,
-      displayTitle: data.titles?.display || data.title,
+      displayTitle: stripHtmlTags(data.titles?.display || data.title),
       extract: data.extract,
       thumbnail: data.thumbnail
         ? {

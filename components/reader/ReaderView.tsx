@@ -5,6 +5,8 @@ import { WikiArticle, WikiSummary } from "@/types/history";
 import { ExternalLink, List, BookOpen, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
+const stripHtmlTags = (html: string) => html.replace(/<[^>]*>/g, "").trim();
+
 interface ReaderViewProps {
   article: WikiArticle;
 }
@@ -85,7 +87,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
             ...prev,
             data: {
               title: data.title,
-              displayTitle: data.titles?.display || data.title,
+              displayTitle: stripHtmlTags(data.titles?.display || data.title),
               extract: data.extract,
               thumbnail: data.thumbnail,
               pageUrl: data.content_urls?.desktop?.page,
