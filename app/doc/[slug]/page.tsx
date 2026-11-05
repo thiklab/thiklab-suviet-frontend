@@ -11,12 +11,8 @@ import { CONTENT_LAST_MODIFIED } from "@/lib/seo/site";
 import { fitDescription, truncate } from "@/lib/seo/text";
 import { fetchWikiArticle } from "@/lib/wikipedia/client";
 
-export const revalidate = 3600;
-
-// Không gọi Wikipedia lúc build; trang được sinh theo yêu cầu rồi cache (ISR)
-export function generateStaticParams() {
-  return [];
-}
+// Trang đọc searchParams (?t=) nên render theo yêu cầu; dữ liệu Wikipedia vẫn được cache ở tầng fetch/Redis
+export const dynamic = "force-dynamic";
 
 type DocProps = {
   params: Promise<{ slug: string }>;
