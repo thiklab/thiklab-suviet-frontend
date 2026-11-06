@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { WikiArticle, WikiSummary } from "@/types/history";
 import { Icon } from "@/components/common/Icon";
 import Link from "next/link";
+import { AiSummary } from "./AiSummary";
 import { docLinkHref, timelineHref } from "@/lib/seo/slug";
 import {
   LANE_NAMES,
@@ -186,6 +187,8 @@ export const ReaderView: React.FC<ReaderViewProps> = ({ article }) => {
             onMouseOut={handleMouseOut}
             className="col-span-12 lg:col-span-8 min-w-0 bg-white/90 p-4 sm:p-10 lg:p-14 rounded-3xl border border-paper-300/40 shadow-editorial text-paper-900"
           >
+            <AiSummary title={article.title} />
+
             {/* Tóm tắt nhanh mở đầu */}
             {article.summary && (
               <div className="mb-8 sm:mb-10 p-4 sm:p-6 bg-paper-50 rounded-2xl border-l-4 border-crimson">
